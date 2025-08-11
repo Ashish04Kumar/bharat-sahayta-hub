@@ -67,7 +67,7 @@ const CommonNavbar = () => {
             <select
               value={language}
               onChange={handleLanguageChange}
-              className="border border-gray-300 rounded-md px-2 py-1 text-sm bg-white text-foreground"
+              className="border border-gray-300 rounded-md px-2 py-1 text-sm bg-white text-foreground text-dark"
             >
               {languages.map((lang) => (
                 <option key={lang.code} value={lang.code}>
@@ -76,7 +76,7 @@ const CommonNavbar = () => {
               ))}
             </select>
 
-            <button className="font-medium">{t.buttons.signIn}</button>
+            <button className="font-medium text-dark">{t.buttons.signIn}</button>
             <button className="shadow-warm-gradient p-2 pr-[16px] pl-[16px] text-white rounded-2xl cursor-pointer font-medium">
               {t.buttons.joinNetwork}
             </button>
