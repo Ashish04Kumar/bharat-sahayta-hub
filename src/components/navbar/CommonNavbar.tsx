@@ -39,7 +39,7 @@ const CommonNavbar = () => {
               <MapPin className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold text-foreground">
+              <h1 className="text-black text-xl font-bold text-foreground">
                 {t.logo.title}
               </h1>
               <p className="text-xs text-muted-foreground -mt-1">

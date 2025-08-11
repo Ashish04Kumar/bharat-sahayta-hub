@@ -50,7 +50,7 @@ const HowItWorksSection = () => {
     <div className="how-it-works-wrapper pt-16 pb-16 relative">
       <div className="common-header-section pb-16 container">
         <h2
-          className="text-4xl md:text-5xl font-bold mb-6 text-foreground text-center"
+          className="text-4xl md:text-5xl font-bold mb-6 text-foreground text-center text-black"
           dangerouslySetInnerHTML={{ __html: t.chooseYourJourneyTitle }}
         />
         <p className="subheading-text text-xl text-muted-foreground max-w-3xl mx-auto text-center">

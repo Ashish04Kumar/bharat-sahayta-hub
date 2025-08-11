@@ -13,7 +13,7 @@ const ChooseJourneySection = () => {
       <div className="journey-section-wrapper container">
         <div className="common-header-section pb-16">
           <h2
-            className="text-4xl md:text-5xl font-bold mb-6 text-foreground text-center"
+            className="text-black text-4xl md:text-5xl font-bold mb-6 text-foreground text-center"
             dangerouslySetInnerHTML={{ __html: t.chooseYourJourneyTitle }}
           />
           <p className="subheading-text text-xl text-muted-foreground max-w-3xl mx-auto text-center">

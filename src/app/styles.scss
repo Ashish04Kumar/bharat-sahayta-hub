@@ -169,7 +169,9 @@ $breakpoint-xxl: 1400px;
 
 //actual styling starts here
 
-
+.text-dark{
+  color: #000;
+}
 .text-muted-foreground {
   color: hsl(var(--muted-foreground));
   font-weight: 500;
