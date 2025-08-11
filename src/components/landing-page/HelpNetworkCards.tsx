@@ -56,7 +56,7 @@ const HelpNetworkCards = () => {
     const currentData = cardData[language];
     return (
       <div
-        className={`bg-white rounded-3xl shadow-xl p-8 max-w-sm mx-auto  relative overflow-hidden ${cardData.cardGradient}`}
+        className={`bg-white rounded-3xl shadow-[0_4px_6px_rgba(0,0,0,0.1),0_-4px_6px_rgba(0,0,0,0.1)] p-8 max-w-sm mx-auto  relative overflow-hidden ${cardData.cardGradient}`}
       >
         <div className="absolute top-2 right-1 w-20 h-20 opacity-10">
           <MapPin className="w-full h-full" />
@@ -78,7 +78,7 @@ const HelpNetworkCards = () => {
         <p className="text-gray-600 text-sm leading-relaxed mb-6">
           {currentData.description}
         </p>
-        
+
         <div className="space-y-3 mb-8">
           {currentData.features.map((feature, index) => (
             <div key={index} className="flex items-start space-x-3">

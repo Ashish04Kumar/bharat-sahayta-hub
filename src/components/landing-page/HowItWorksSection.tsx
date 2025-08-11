@@ -74,7 +74,7 @@ const HowItWorksSection = () => {
             >
               <div
                 className={`step-number ${
-                  index % 2 === 0 ? "right-0" : "left-0"
+                  index % 2 === 0 ? "right-0" : "left-[20px]  md:left-0"
                 }`}
               >
                 {String(index + 1).padStart(2, "0")}

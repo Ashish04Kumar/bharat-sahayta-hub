@@ -8,7 +8,6 @@ $breakpoints: (
   lg: 992px,
   xl: 1200px,
   xxl: 1400px
-
 );
 
 // =========================================
@@ -169,9 +168,10 @@ $breakpoint-xxl: 1400px;
 
 //actual styling starts here
 
-.text-dark{
+.text-dark {
   color: #000;
 }
+
 .text-muted-foreground {
   color: hsl(var(--muted-foreground));
   font-weight: 500;
@@ -298,7 +298,18 @@ $breakpoint-xxl: 1400px;
     font-weight: 900;
     color: rgb(16 40 68 / 10%);
     z-index: 0;
+
+    @include media-breakpoint-down(md) {
+      z-index: 1;
+      font-size: 3.2rem;
+      top: -33px;
+
+    }
+
+
   }
+
+
 
   .timeline-content {
     position: relative;
