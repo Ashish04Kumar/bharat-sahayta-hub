@@ -95,7 +95,7 @@ const HowItWorksSection = () => {
                         className="col-5 feature-point items-center flex flex-col md:flex-row justify-center "
                       >
                         <IconComponent  />
-                        <p className="mb-0 text-center text-sm md:text-base">{feature}</p>
+                        <p className="mb-0  md:text-start text-sm md:text-base text-gray-800">{feature}</p>
                       </div>
                     );
                   })}
