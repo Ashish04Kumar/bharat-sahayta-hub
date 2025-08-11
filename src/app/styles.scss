@@ -1,0 +1,330 @@
+// =========================================
+// Bootstrap-style Breakpoints (Custom)
+// =========================================
+// These match Bootstrap 5 defaults
+$breakpoints: (
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+
+);
+
+// =========================================
+// Bootstrap-style Mixins
+// =========================================
+
+// "Down" mixin (max-width)
+// Usage: @include media-breakpoint-down(md) { ... }
+@mixin media-breakpoint-down($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+
+    // subtract 0.02px to avoid overlap with "up" mixin
+    @media (max-width: #{map-get($breakpoints, $breakpoint) - 0.02}) {
+      @content;
+    }
+  }
+
+  @else {
+    @warn "No breakpoint found for `#{$breakpoint}`.";
+  }
+}
+
+// "Up" mixin (min-width)
+// Usage: @include media-breakpoint-up(lg) { ... }
+@mixin media-breakpoint-up($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    @media (min-width: #{map-get($breakpoints, $breakpoint)}) {
+      @content;
+    }
+  }
+
+  @else {
+    @warn "No breakpoint found for `#{$breakpoint}`.";
+  }
+}
+
+
+$breakpoint-sm: 576px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 992px;
+$breakpoint-xl: 1200px;
+$breakpoint-xxl: 1400px;
+
+// ==========================
+// 2️⃣ Custom Mixins
+// ==========================
+@mixin down-sm {
+  @media (max-width: #{$breakpoint-sm - 0.02}) {
+    @content;
+  }
+}
+
+@mixin down-md {
+  @media (max-width: #{$breakpoint-md - 0.02}) {
+    @content;
+  }
+}
+
+@mixin down-lg {
+  @media (max-width: #{$breakpoint-lg - 0.02}) {
+    @content;
+  }
+}
+
+@mixin up-sm {
+  @media (min-width: $breakpoint-sm) {
+    @content;
+  }
+}
+
+@mixin up-md {
+  @media (min-width: $breakpoint-md) {
+    @content;
+  }
+}
+
+@mixin up-lg {
+  @media (min-width: $breakpoint-lg) {
+    @content;
+  }
+}
+
+// ==========================
+// 3️⃣ Grid Base Styles
+// ==========================
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
+[class*="col-"] {
+  padding-left: 15px;
+  padding-right: 15px;
+  box-sizing: border-box;
+}
+
+// ==========================
+// 4️⃣ Default Column Sizes (Mobile First)
+// ==========================
+@for $i from 1 through 12 {
+  .col-#{$i} {
+    flex: 0 0 #{($i / 12) * 100%};
+    max-width: #{($i / 12) * 100%};
+  }
+}
+
+// ==========================
+// 5️⃣ Responsive Columns
+// ==========================
+@each $bpName, $bpSize in (sm: $breakpoint-sm, md: $breakpoint-md, lg: $breakpoint-lg, xl: $breakpoint-xl) {
+  @media (min-width: $bpSize) {
+    @for $i from 1 through 12 {
+      .col-#{$bpName}-#{$i} {
+        flex: 0 0 #{($i / 12) * 100%};
+        max-width: #{($i / 12) * 100%};
+      }
+    }
+  }
+}
+
+
+// Base container style
+.container {
+  width: 100%;
+  padding-right: 15px;
+  padding-left: 15px;
+  margin-right: auto;
+  margin-left: auto;
+
+  // Small devices (≥576px)
+  @media (min-width: $breakpoint-sm) {
+    max-width: 540px;
+  }
+
+  // Medium devices (≥768px)
+  @media (min-width: $breakpoint-md) {
+    max-width: 720px;
+  }
+
+  // Large devices (≥992px)
+  @media (min-width: $breakpoint-lg) {
+    max-width: 960px;
+  }
+
+  // Extra large devices (≥1200px)
+  @media (min-width: $breakpoint-xl) {
+    max-width: 1140px;
+  }
+
+  // Extra extra large devices (≥1400px)
+  @media (min-width: $breakpoint-xxl) {
+    max-width: 1320px;
+  }
+}
+
+
+//actual styling starts here
+
+
+.text-muted-foreground {
+  color: hsl(var(--muted-foreground));
+  font-weight: 500;
+}
+
+// Heartbeat shadow animation
+@keyframes heartbeat {
+
+  0%,
+  100% {
+    box-shadow: 0 0 10px 3px rgba(239, 68, 68, 0.7);
+  }
+
+  50% {
+    box-shadow: 0 0 20px 6px rgba(239, 68, 68, 1);
+  }
+}
+
+.heartbeat-shadow {
+  animation: heartbeat 1.5s infinite ease-in-out;
+}
+
+// Common nav wrapper
+.common-nav-wrapper {
+  background: rgba(255, 255, 255, 0.7);
+  border-bottom: 1px solid rgba(231, 231, 231, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  .shadow-warm-gradient {
+    background: linear-gradient(135deg, hsl(25 95% 53%), hsl(214 84% 56%));
+  }
+}
+
+// Common header section
+.common-header-section {
+  h2 {
+    span {
+      color: hsl(var(--primary));
+    }
+  }
+}
+
+// Banner section wrapper
+.banner-section-wrapper {
+  height: calc(100vh - 60px);
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 60px;
+
+  @include media-breakpoint-down(md) {
+    height: fit-content;
+    padding: 40px 0;
+  }
+
+  .banner-section-content {
+    margin: 0 auto;
+    width: 80%;
+    padding: 20px;
+    border-radius: var(--border-radius-primary);
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(20, 20, 20, 0.4));
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: white;
+  }
+}
+
+.banner-section-wrapper::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("../../public/images/hero-helping-hands.jpg");
+  background-size: cover;
+  background-position: center;
+  filter: blur(4px);
+  z-index: 0;
+}
+
+// How-it-works wrapper
+.how-it-works-wrapper {
+  background: linear-gradient(to bottom, #ffffff 0%, #ebf6f8 30%, #fdfaff 100%);
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: linear-gradient(180deg, #4a90e2, #ff6b6b, #50c878, #ffc107, #9c27b0);
+    transform: translateX(-50%);
+    border-radius: 2px;
+    box-shadow: 0 0 20px rgba(74, 144, 226);
+
+    @include media-breakpoint-down(md) {
+      left: 3%;
+    }
+  }
+
+  .timeline-item.right {
+    padding-left: 55%;
+    text-align: right;
+
+    @include media-breakpoint-down(md) {
+      padding-left: 9%;
+    }
+  }
+
+  .timeline-item.left {
+    padding-right: 55%;
+
+    @include media-breakpoint-down(md) {
+      padding-left: 9%;
+      padding-right: 0%;
+    }
+  }
+
+  .step-number {
+    position: absolute;
+    top: -15px;
+    font-size: 5rem;
+    font-weight: 900;
+    color: rgb(16 40 68 / 10%);
+    z-index: 0;
+  }
+
+  .timeline-content {
+    position: relative;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(74, 144, 226, 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    transition: all 0.4s;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+
+    @include media-breakpoint-down(md) {
+      padding: 1.2rem;
+    }
+  }
+
+  .feature-point {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem;
+    background: rgba(74, 144, 226, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(74, 144, 226, 0.1);
+    transition: all 0.3s;
+
+    @include media-breakpoint-down(md) {
+      padding: 0.8rem;
+    }
+  }
+}
