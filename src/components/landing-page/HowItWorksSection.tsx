@@ -25,7 +25,7 @@ import {
   MessageCircle,
   TrendingUp,
 } from "lucide-react";
-import { howItWorksText } from "@/fixtures/how-it-works/how-it-words";
+import { howItWorksText } from "@/fixtures/landing-page/how-it-works/how-it-words";
 
 const HowItWorksSection = () => {
   const { language } = useLanguage();
@@ -95,7 +95,7 @@ const HowItWorksSection = () => {
                         className="col-5 feature-point items-center flex flex-col md:flex-row justify-center "
                       >
                         <IconComponent color="gray" />
-                        <p className="mb-0  md:text-start text-sm md:text-base text-gray-800">
+                        <p className="mb-0  text-center md:text-start text-sm md:text-base text-gray-800">
                           {feature}
                         </p>
                       </div>

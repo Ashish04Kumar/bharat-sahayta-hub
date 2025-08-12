@@ -6,6 +6,7 @@ import DetailedUserJourney from "@/components/landing-page/DetailedUserJourney";
 import AllUsersTogetherSection from "@/components/landing-page/AllUsersTogetherSection";
 import ImpactSection from "@/components/landing-page/ImpactSection";
 import BannerSection from "@/components/landing-page/BannerSection";
+import WhatMakesDifferentSection from "@/components/landing-page/WhatMakesDifferentSection";
 
 const page = () => {
   return (
@@ -14,6 +15,9 @@ const page = () => {
       <ChooseJourneySection />
       <HowItWorksSection />
       <EcosystemSection />
+      <WhatMakesDifferentSection />
+      <p className="text-red-700">below three sections are yet to be done</p>
+
       <DetailedUserJourney />
       <AllUsersTogetherSection />
       <ImpactSection />

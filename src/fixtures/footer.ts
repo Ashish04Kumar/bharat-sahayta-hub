@@ -1,0 +1,117 @@
+export const footerText = {
+  en: {
+    aboutTitle: "SahayataMap",
+    aboutSubtitle: "Help Network",
+    aboutDesc:
+      "Building India's most compassionate community through real-time help mapping. Every act of kindness creates ripples of positive change.",
+    loveNote: "❤️ Made with love for humanity and animals",
+    quickLinksTitle: "Quick Links",
+    quickLinks: [
+      "How It Works",
+      "Emergency SOS",
+      "NGO Partnership",
+      "Volunteer Guide",
+      "Safety Guidelines",
+    ],
+    contactTitle: "Contact",
+    contactPhone: "+91 911 HELP (4357)",
+    contactEmail: "help@sahayatamap.in",
+    contactLocation: "Pan India Network",
+    privacyPolicy: "Privacy Policy",
+    terms: "Terms of Service",
+    copyright:
+      "© 2024 SahayataMap. All rights reserved. Building bridges of compassion.",
+  },
+  hi: {
+    aboutTitle: "सहायता मैप",
+    aboutSubtitle: "मदद नेटवर्क",
+    aboutDesc:
+      "भारत के सबसे दयालु समुदाय का निर्माण वास्तविक समय सहायता मैपिंग के माध्यम से। हर दयालुता का कार्य सकारात्मक बदलाव की लहरें पैदा करता है।",
+    loveNote: "❤️ मानवता और जानवरों के लिए प्रेम से बनाया गया",
+    quickLinksTitle: "त्वरित लिंक",
+    quickLinks: [
+      "यह कैसे काम करता है",
+      "आपातकालीन SOS",
+      "एनजीओ साझेदारी",
+      "स्वयंसेवक गाइड",
+      "सुरक्षा दिशानिर्देश",
+    ],
+    contactTitle: "संपर्क करें",
+    contactPhone: "+91 911 HELP (4357)",
+    contactEmail: "help@sahayatamap.in",
+    contactLocation: "संपूर्ण भारत नेटवर्क",
+    privacyPolicy: "गोपनीयता नीति",
+    terms: "सेवा की शर्तें",
+    copyright:
+      "© 2024 सहायता मैप। सर्वाधिकार सुरक्षित। दया के पुल बना रहे हैं।",
+  },
+  pa: {
+    aboutTitle: "ਸਹਾਇਤਾ ਮੈਪ",
+    aboutSubtitle: "ਮਦਦ ਨੈਟਵਰਕ",
+    aboutDesc:
+      "ਭਾਰਤ ਦਾ ਸਭ ਤੋਂ ਦਇਆ ਭਰਿਆ ਸਮੁਦਾਇ ਬਣਾਉਣਾ, ਰੀਅਲ-ਟਾਈਮ ਮਦਦ ਮੈਪਿੰਗ ਰਾਹੀਂ। ਦਇਆ ਦਾ ਹਰ ਕੰਮ ਸਕਾਰਾਤਮਕ ਬਦਲਾਅ ਦੀਆਂ ਲਹਿਰਾਂ ਪੈਦਾ ਕਰਦਾ ਹੈ।",
+    loveNote: "❤️ ਮਨੁੱਖਤਾ ਅਤੇ ਜਾਨਵਰਾਂ ਲਈ ਪਿਆਰ ਨਾਲ ਬਣਾਇਆ ਗਿਆ",
+    quickLinksTitle: "ਝਟ-ਪਟ ਲਿੰਕ",
+    quickLinks: [
+      "ਇਹ ਕਿਵੇਂ ਕੰਮ ਕਰਦਾ ਹੈ",
+      "ਐਮਰਜੈਂਸੀ SOS",
+      "ਐਨਜੀਓ ਸਾਂਝੇਦਾਰੀ",
+      "ਵਲੰਟੀਅਰ ਗਾਈਡ",
+      "ਸੁਰੱਖਿਆ ਹਦਾਇਤਾਂ",
+    ],
+    contactTitle: "ਸੰਪਰਕ ਕਰੋ",
+    contactPhone: "+91 911 HELP (4357)",
+    contactEmail: "help@sahayatamap.in",
+    contactLocation: "ਪੂਰਾ ਭਾਰਤ ਨੈਟਵਰਕ",
+    privacyPolicy: "ਗੋਪਨੀਯਤਾ ਨੀਤੀ",
+    terms: "ਸੇਵਾ ਦੀਆਂ ਸ਼ਰਤਾਂ",
+    copyright:
+      "© 2024 ਸਹਾਇਤਾ ਮੈਪ। ਸਾਰੇ ਹੱਕ ਰਾਖਵੇਂ ਹਨ। ਦਇਆ ਦੇ ਪੁਲ ਬਣਾ ਰਹੇ ਹਾਂ।",
+  },
+  bn: {
+    aboutTitle: "সহায়তা মানচিত্র",
+    aboutSubtitle: "সহায়তা নেটওয়ার্ক",
+    aboutDesc:
+      "ভারতের সবচেয়ে সহানুভূতিশীল সম্প্রদায় তৈরি করা, রিয়েল-টাইম সহায়তা ম্যাপিং এর মাধ্যমে। প্রতিটি দয়ার কাজ ইতিবাচক পরিবর্তনের ঢেউ তৈরি করে।",
+    loveNote: "❤️ মানবতা এবং প্রাণীদের জন্য ভালোবাসা দিয়ে তৈরি",
+    quickLinksTitle: "দ্রুত লিঙ্ক",
+    quickLinks: [
+      "এটি কিভাবে কাজ করে",
+      "জরুরি SOS",
+      "এনজিও অংশীদারিত্ব",
+      "স্বেচ্ছাসেবক গাইড",
+      "নিরাপত্তা নির্দেশিকা",
+    ],
+    contactTitle: "যোগাযোগ",
+    contactPhone: "+91 911 HELP (4357)",
+    contactEmail: "help@sahayatamap.in",
+    contactLocation: "সারা ভারত নেটওয়ার্ক",
+    privacyPolicy: "গোপনীয়তা নীতি",
+    terms: "পরিষেবার শর্তাবলী",
+    copyright:
+      "© 2024 সহায়তা মানচিত্র। সর্বস্বত্ব সংরক্ষিত। সহানুভূতির সেতু তৈরি করছি।",
+  },
+  ta: {
+    aboutTitle: "சஹாயதா மேப்",
+    aboutSubtitle: "உதவி வலைப்பின்னல்",
+    aboutDesc:
+      "இந்தியாவின் மிகவும் கருணையுள்ள சமூகத்தை நேரடி உதவி வரைபடம் மூலம் உருவாக்குதல். ஒவ்வொரு அன்பான செயலும் நேர்மறை மாற்றத்தின் அலைகளை உருவாக்குகிறது.",
+    loveNote: "❤️ மனிதகுலம் மற்றும் விலங்குகளுக்கான அன்புடன் உருவாக்கப்பட்டது",
+    quickLinksTitle: "விரைவு இணைப்புகள்",
+    quickLinks: [
+      "இது எப்படி செயல்படுகிறது",
+      "அவசர SOS",
+      "என்ஜிஒ கூட்டாண்மை",
+      "தன்னார்வ வழிகாட்டி",
+      "பாதுகாப்பு வழிகாட்டிகள்",
+    ],
+    contactTitle: "தொடர்பு",
+    contactPhone: "+91 911 HELP (4357)",
+    contactEmail: "help@sahayatamap.in",
+    contactLocation: "இந்தியா முழுவதும் வலைப்பின்னல்",
+    privacyPolicy: "தனியுரிமைக் கொள்கை",
+    terms: "சேவை விதிமுறைகள்",
+    copyright:
+      "© 2024 சஹாயதா மேப். அனைத்து உரிமைகளும் பாதுகாக்கப்பட்டுள்ளன. கருணையின் பாலங்களை கட்டுகின்றோம்.",
+  },
+};

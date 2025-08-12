@@ -3,6 +3,7 @@ import translations from "../../fixtures/navbar/navbar.json";
 import { MapPin, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useLanguage } from "../../context/LanguageContext";
+import { useRouter } from "next/navigation";
 
 const CommonNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -29,12 +30,13 @@ const CommonNavbar = () => {
     changeLanguage(e.target.value as typeof language);
   };
 
+  const router = useRouter()
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b border-border/50 common-nav-wrapper">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push("/")} >
             <div className="w-10 h-10 bg-gradient-hero rounded-full flex items-center justify-center shadow-warm-gradient">
               <MapPin className="w-6 h-6 text-white" />
             </div>
@@ -77,7 +79,7 @@ const CommonNavbar = () => {
             </select>
 
             <button className="font-medium text-dark">{t.buttons.signIn}</button>
-            <button className="shadow-warm-gradient p-2 pr-[16px] pl-[16px] text-white rounded-2xl cursor-pointer font-medium">
+            <button className="shadow-warm-gradient p-2 pr-[16px] pl-[16px] text-white rounded-2xl cursor-pointer font-medium cursor-pointer" onClick={() => router.push("/register-user")}>
               {t.buttons.joinNetwork}
             </button>
           </div>
@@ -124,7 +126,7 @@ const CommonNavbar = () => {
 
               <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
                 <button className="banner-help-btn">{t.buttons.signIn}</button>
-                <button className="banner-sos-btn">{t.buttons.joinNetwork}</button>
+                <button className="banner-sos-btn cursor-pointer" onClick={() => router.push("/register-user")}>{t.buttons.joinNetwork}</button>
               </div>
             </nav>
           </div>
