@@ -18,7 +18,7 @@ const CommonFooter = () => {
             </div>
             <div>
               {" "}
-              <h2 className="text-xl font-bold text-black">{t.aboutTitle}</h2>
+              <h2 className="text-dark text-xl font-bold text-black">{t.aboutTitle}</h2>
               <p className="text-sm text-muted-foreground">{t.aboutSubtitle}</p>
             </div>
           </div>
@@ -27,7 +27,7 @@ const CommonFooter = () => {
         </div>
 
         <div className="footer-links">
-          <h3 className="text-lg font-semibold mb-3">{t.quickLinksTitle}</h3>
+          <h3 className="text-dark text-lg font-semibold mb-3">{t.quickLinksTitle}</h3>
           <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
             {t.quickLinks.map((link, idx) => (
               <li key={idx} className="hover:text-orange-500 cursor-pointer">
@@ -38,7 +38,7 @@ const CommonFooter = () => {
         </div>
 
         <div className="footer-contact">
-          <h3 className="text-lg font-semibold mb-3">{t.contactTitle}</h3>
+          <h3 className="text-dark text-lg font-semibold mb-3">{t.contactTitle}</h3>
           <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
             <li>📞 {t.contactPhone}</li>
             <li>📧 {t.contactEmail}</li>

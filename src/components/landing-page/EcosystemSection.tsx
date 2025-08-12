@@ -6,7 +6,7 @@ const EcosystemSection = () => {
   const { language } = useLanguage();
   const t = ecosystemText[language] || ecosystemText.en;
   return (
-    <div className="ecosystem-wrapper pt-16 pb-16  bg-[#fcfcfb]">
+    <div className="ecosystem-wrapper pt-16 pb-4 md:pb-16  bg-[#fcfcfb]">
       <div className="common-header-section pb-16 container">
         <h2
           className="text-4xl md:text-5xl font-bold mb-6 text-foreground text-center text-black"
