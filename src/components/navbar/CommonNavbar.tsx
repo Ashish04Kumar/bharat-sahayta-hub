@@ -79,7 +79,7 @@ const CommonNavbar = () => {
             </select>
 
             <button className="font-medium text-dark">{t.buttons.signIn}</button>
-            <button className="shadow-warm-gradient p-2 pr-[16px] pl-[16px] text-white rounded-2xl cursor-pointer font-medium cursor-pointer" onClick={() => router.push("/register-user")}>
+            <button className="shadow-warm-gradient p-2 pr-[16px] pl-[16px] text-white rounded-2xl cursor-pointer font-medium" onClick={() => router.push("/register-user")}>
               {t.buttons.joinNetwork}
             </button>
           </div>

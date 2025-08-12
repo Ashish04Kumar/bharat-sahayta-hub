@@ -56,7 +56,7 @@ const WhatMakesDifferentSection = () => {
                     </div>
 
                     <div>
-                      <h3 className="text-base md:text-xl font-semibold mb-2 text-foreground">
+                      <h3 className="text-dark text-base md:text-xl font-semibold mb-2 text-foreground">
                         {obj.title}
                       </h3>
                       <p className="text-sm md:text-base text-muted-foreground leading-relaxed">

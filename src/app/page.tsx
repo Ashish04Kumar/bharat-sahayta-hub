@@ -10,7 +10,7 @@ import WhatMakesDifferentSection from "@/components/landing-page/WhatMakesDiffer
 
 const page = () => {
   return (
-    <div>
+    <div className="bg-white">
       <BannerSection />
       <ChooseJourneySection />
       <HowItWorksSection />

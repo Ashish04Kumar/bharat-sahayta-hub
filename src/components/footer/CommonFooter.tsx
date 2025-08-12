@@ -48,9 +48,11 @@ const CommonFooter = () => {
       </div>
 
       {/* Bottom Section */}
-      <div className="footer-bottom flex flex-col md:flex-row justify-between items-center mt-8 border-t pt-2 md:pt-4 px-4 text-sm text-gray-500">
+      <div className="footer-bottom flex flex-col md:flex-row justify-between items-center mt-8 pt-2 md:pt-4 px-4 text-sm text-gray-500 border-t"
+     
+      >
         <p>{t.copyright}</p>
-        <div className="flex gap-4">
+        <div className="flex gap-4 mt-3 md:mt-0">
           <span className="hover:text-orange-500 cursor-pointer">
             {t.privacyPolicy}
           </span>
