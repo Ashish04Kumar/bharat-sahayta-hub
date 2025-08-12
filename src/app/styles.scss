@@ -201,11 +201,11 @@ $breakpoint-xxl: 1400px;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 
-  .shadow-warm-gradient {
+  
+}
+.shadow-warm-gradient {
     background: linear-gradient(135deg, hsl(25 95% 53%), hsl(214 84% 56%));
   }
-}
-
 // Common header section
 .common-header-section {
   h2 {
@@ -339,5 +339,30 @@ $breakpoint-xxl: 1400px;
     @include media-breakpoint-down(md) {
       padding: 0.8rem;
     }
+  }
+}
+
+
+// src/components/Footer/Footer.scss
+.footer-wrapper {
+  background: linear-gradient(to bottom, #fdfdfc 0%, #ececeb 50%, #e9e9dc 100%);
+
+  .footer-about {
+    p {
+      line-height: 1.5;
+    }
+  }
+
+  .footer-links,
+  .footer-contact {
+    ul {
+      li {
+        transition: color 0.3s ease;
+      }
+    }
+  }
+
+  .footer-bottom {
+    border-color: #e5e7eb; // Tailwind's gray-200
   }
 }
