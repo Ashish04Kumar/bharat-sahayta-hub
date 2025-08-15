@@ -130,6 +130,13 @@ $breakpoint-xxl: 1400px;
   }
 }
 
+.position-relative {
+  position: relative !important;
+}
+
+.position-absolute {
+  position: absolute !important;
+}
 
 // Base container style
 .container {
@@ -201,11 +208,13 @@ $breakpoint-xxl: 1400px;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
 
-  
+
 }
+
 .shadow-warm-gradient {
-    background: linear-gradient(135deg, hsl(25 95% 53%), hsl(214 84% 56%));
-  }
+  background: linear-gradient(135deg, hsl(25 95% 53%), hsl(214 84% 56%));
+}
+
 // Common header section
 .common-header-section {
   h2 {
@@ -363,6 +372,192 @@ $breakpoint-xxl: 1400px;
   }
 
   .footer-bottom {
-    border-color: #f5c2c2; 
+    border-color: #f5c2c2;
+  }
+}
+
+.detailed_user_journey_wrapper {
+  .journey-card {
+    background: #fff;
+    border-radius: 1rem;
+    padding: 2rem;
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .journey-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  }
+
+  .icon-circle {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, rgb(249, 116, 21), rgb(49, 130, 237));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+  }
+
+  .journey-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #222;
+    margin-bottom: 1.2rem;
+  }
+
+  .steps-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    flex-grow: 1;
+  }
+
+  .steps-list li {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 0.8rem;
+  }
+
+  .step-number {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #ecdac3;
+    color: #f87415;
+    font-size: 0.9rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.6rem;
+    flex-shrink: 0;
+  }
+
+  .step-text {
+    flex: 1;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.4;
+  }
+
+  .journey-footer {
+    margin-top: auto;
+    font-size: 0.9rem;
+    color: #555;
+    border-top: 1px solid #eee;
+    padding-top: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .footer-check-icon {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid #f97516;
+    /* Outline circle */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+
+  .swiper {
+    position: unset !important;
+  }
+
+  .custom-swiper-prev,
+  .custom-swiper-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    background: #f87415;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 10;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+
+    @include media-breakpoint-down(md) {
+      width: 35px;
+      height: 35px;
+
+    }
+  }
+
+  .custom-swiper-prev:hover,
+  .custom-swiper-next:hover {
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .custom-swiper-prev {
+    left: -50px;
+
+    @include media-breakpoint-down(md) {
+      left: 5px;
+
+    }
+  }
+
+  .custom-swiper-next {
+    right: -50px;
+
+    @include media-breakpoint-down(md) {
+      right: 5px;
+
+    }
+  }
+
+  .custom-swiper-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.2rem;
+    position: absolute !important;
+    bottom: -40px !important;
+
+    @include media-breakpoint-down(md) {
+      bottom: -10px !important;
+
+
+    }
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: #f87415;
+  }
+
+
+
+  .animal_care_focus {
+    border: 1px solid #eedcc2;
+    border-radius: 16px;
+    background-color: #ebf4eb;
+    padding: 1rem;
+    justify-self: flex-end;
+     width: 40%;
+
+    @include media-breakpoint-down(md) {
+      justify-self: unset;
+      width: 100%;
+
+
+    }
   }
 }
