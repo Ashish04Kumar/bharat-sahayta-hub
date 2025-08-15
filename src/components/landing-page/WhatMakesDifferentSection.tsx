@@ -6,24 +6,23 @@ import { useLanguage } from "@/context/LanguageContext";
 const WhatMakesDifferentSection = () => {
   const { language } = useLanguage();
   const t = whatMakesDifferentText[language] || whatMakesDifferentText.en;
-
   // track which icon index is rotating
   const [rotatingIndex, setRotatingIndex] = useState(null);
 
   const handleRotate = (index) => {
     setRotatingIndex(index);
-    setTimeout(() => setRotatingIndex(null), 1000); // reset after 1s
+    setTimeout(() => setRotatingIndex(null), 1000);
   };
 
   return (
-    <div className="bg-[#ffffff] mt-10">
-      <div className="pt-16 pb-16 container">
-        <div className="flex gap-[30px] items-center flex-col flex-col-reverse md:flex-row ">
+    <div className="bg-[#ffffff] pt-10 md:pt-16 pb-10 md:pb-16">
+      <div className="container">
+        <div className="flex gap-[30px] items-center flex-col-reverse md:flex-row ">
           <div className="w-[80%] md:w-[35%] rounded-2xl overflow-hidden">
             <img src="/images/india-map-2.gif" alt="India Map" />
           </div>
 
-          <div className="common-header-section mt-[-46px] flex-1">
+          <div className="common-header-section mt-0 md:mt-20 flex-1">
             <h2
               className="text-4xl md:text-5xl font-bold mb-16 md:mb-10 text-foreground  text-black text-center md:text-start "
               dangerouslySetInnerHTML={{ __html: t.title }}

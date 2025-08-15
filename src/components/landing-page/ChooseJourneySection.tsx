@@ -9,7 +9,7 @@ const ChooseJourneySection = () => {
   const t = headerSectionText[language];
 
   return (
-    <div className=" mx-auto pt-16  pb-16 bg-white">
+    <div className=" mx-auto pt-10 pb-10 md:pt-16 md:pb-16  bg-white">
       <div className="journey-section-wrapper container">
         <div className="common-header-section pb-16">
           <h2

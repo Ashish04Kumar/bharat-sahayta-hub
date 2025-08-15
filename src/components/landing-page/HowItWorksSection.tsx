@@ -47,7 +47,7 @@ const HowItWorksSection = () => {
   ];
 
   return (
-    <div className="how-it-works-wrapper pt-16 pb-16 relative">
+    <div className="how-it-works-wrapper pt-10 pb-10 md:pt-16 md:pb-16 relative">
       <div className="common-header-section pb-16 container">
         <h2
           className="text-4xl md:text-5xl font-bold mb-6 text-foreground text-center text-black"
