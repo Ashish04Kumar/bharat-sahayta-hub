@@ -16,8 +16,6 @@ const page = () => {
       <HowItWorksSection />
       <EcosystemSection />
       <WhatMakesDifferentSection />
-      <p className="text-red-700">below three sections are yet to be done</p>
-
       <DetailedUserJourney />
       <AllUsersTogetherSection />
       <ImpactSection />
