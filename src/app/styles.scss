@@ -378,15 +378,24 @@ $breakpoint-xxl: 1400px;
 
 .detailed_user_journey_wrapper {
   .journey-card {
-    background: #fff;
+    background: linear-gradient(135deg,
+        rgba(248, 250, 252, 0.8) 0%,
+        /* light slate tint with transparency */
+        rgba(241, 245, 249, 0.9) 50%,
+        /* softer middle tone */
+        rgba(255, 255, 255, 0.95) 100%
+        /* near white */
+      );
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     border-radius: 1rem;
     padding: 2rem;
-    min-height: 450px;
+    height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid #e7c7c7;
   }
 
   .journey-card:hover {
@@ -549,12 +558,24 @@ $breakpoint-xxl: 1400px;
     border: 1px solid #eedcc2;
     border-radius: 16px;
     background-color: #ebf4eb;
-    padding: 1rem;
+    padding: 0.8rem;
     justify-self: flex-end;
-     width: 40%;
+    width: 40%;
 
     @include media-breakpoint-down(md) {
       justify-self: unset;
+      width: 100%;
+
+
+    }
+  }
+}
+
+.all_user_together_wrapper {
+  .cards-container {
+    width: 31%;
+
+    @include media-breakpoint-down(md) {
       width: 100%;
 
 

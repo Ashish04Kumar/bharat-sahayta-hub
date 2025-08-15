@@ -120,11 +120,6 @@ export const whatMakesDifferentText = {
     title: `ਸਾਨੂੰ <span>ਵੱਖਰਾ</span> ਕੀ ਬਣਾਉਂਦਾ ਹੈ?`,
     content: [
       {
-        title: "ਫੋਟੋ/ਵੀਡੀਓ ਸਬੂਤ",
-        desc: "ਹਰ ਮਦਦ ਅਰਜ਼ੀ ਵਿੱਚ ਪਾਰਦਰਸ਼ਤਾ ਲਈ ਵਿਜ਼ੂਅਲ ਪ੍ਰਮਾਣ ਸ਼ਾਮਲ ਹੁੰਦਾ ਹੈ",
-        icon: Camera,
-      },
-      {
         title: "ਰੀਅਲ-ਟਾਈਮ ਨਕਸ਼ਾ",
         desc: "ਇੰਟਰਐਕਟਿਵ ਨਕਸ਼ੇ 'ਤੇ ਦੂਰੀ ਟ੍ਰੈਕਿੰਗ ਨਾਲ ਲਾਈਵ ਬਲਿੰਕਿੰਗ ਅਰਜ਼ੀਆਂ",
         icon: MapPin,

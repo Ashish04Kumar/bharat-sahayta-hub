@@ -6,7 +6,7 @@ const EcosystemSection = () => {
   const { language } = useLanguage();
   const t = ecosystemText[language] || ecosystemText.en;
   return (
-    <div className="ecosystem-wrapper pt-16 pb-4 md:pb-16  bg-[#fcfcfb]">
+    <div className="ecosystem-wrapper pt-10 md:pt-16 pb-10 md:pb-16  bg-[#fcfcfb]">
       <div className="common-header-section pb-16 container">
         <h2
           className="text-4xl md:text-5xl font-bold mb-6 text-foreground text-center text-black"
@@ -22,7 +22,12 @@ const EcosystemSection = () => {
           return (
             <div
               key={idx}
-              className="col-12 md:col-4 mb-4 mt-4 gap-3 flex rounded-lg text-card-foreground shadow-md p-4 group border-0 shadow-card max-w-[100%] md:max-w-[32%] hover:shadow-lg transition-shadow duration-300 ease-in-out"
+              className="col-12 md:col-4 mb-4 mt-4 gap-3 flex rounded-lg text-card-foreground group border-0 max-w-[100%] md:max-w-[32%] transition-shadow duration-300 ease-in-out"
+              style={{
+                boxShadow:
+                  "0 4px 12px rgba(0, 0, 0, 0.08), 0 -2px 6px rgba(0, 0, 0, 0.06)",
+                padding: "26px 20px",
+              }}
             >
               <div
                 className="mt-2 rounded-full flex items-center justify-center flex-shrink-0"
@@ -36,7 +41,6 @@ const EcosystemSection = () => {
                 }}
               >
                 <IconComponent size={28} />
-                
               </div>
 
               <div>

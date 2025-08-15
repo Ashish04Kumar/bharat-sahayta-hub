@@ -37,7 +37,7 @@ const DetailedUserJourney = () => {
     }
   }, [activeTab]);
   return (
-    <div className="detailed_user_journey_wrapper pt-16 pb-16  bg-[#fdfcfb]">
+    <div className="detailed_user_journey_wrapper pt-10 pb-10 md:pt-16 md:pb-16  bg-[#fdfcfb]">
       <section className="container">
         <div className="common-header-section pb-10">
           <h2
@@ -83,7 +83,7 @@ const DetailedUserJourney = () => {
           })}
         </div>
 
-        <div className="container position-relative">
+        <div className="container position-relative pb-4">
           <hr className="mb-5"></hr>
           <Swiper
             modules={[Navigation, Pagination, Autoplay]}
@@ -112,7 +112,7 @@ const DetailedUserJourney = () => {
             {journeyData[language][activeSwiper].sections.map(
               (section, index: number) => (
                 <SwiperSlide key={index} className="mt-4">
-                  <div className="journey-card">
+                  <div className="journey-card ">
                     <div className="flex gap-3 items-center mb-3">
                       <div className="icon-circle">
                         <section.icon size={28} color="#fff" />
@@ -147,16 +147,22 @@ const DetailedUserJourney = () => {
             <div className="custom-swiper-next position-absolute">›</div>
 
             {/* Custom pagination */}
-            <div className="custom-swiper-pagination "></div>
+            <div className="custom-swiper-pagination`"></div>
           </Swiper>
         </div>
 
-        <div className="animal_care_focus mt-24">
-          <div className="flex gap-2 items-center">
+        <div className="animal_care_focus mt-4 md:mt-24 flex gap-3">
+          <div className="h-28 w-28">
             <Dog color="#FF9751" size={38} />
-            <h3 className="text-dark text-base md:text-xl font-semibold mb-2 text-foreground">{animalCareText.header}</h3>
           </div>
-          <p className="pl-8 mt-2 text-muted-foreground leading-relaxed">{animalCareText.desc}</p>
+          <div className="gap-2 items-center">
+            <h3 className="text-dark text-base md:text-xl font-semibold mb-2 text-foreground">
+              {animalCareText.header}
+            </h3>
+            <p className=" mt-2 text-muted-foreground leading-relaxed">
+              {animalCareText.desc}
+            </p>
+          </div>
         </div>
       </section>
     </div>
