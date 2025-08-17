@@ -8,7 +8,7 @@ import ImpactSection from "@/components/landing-page/ImpactSection";
 import BannerSection from "@/components/landing-page/BannerSection";
 import WhatMakesDifferentSection from "@/components/landing-page/WhatMakesDifferentSection";
 
-const page = () => {
+const Page = () => {
   return (
     <div className="bg-white">
       <BannerSection />
@@ -23,4 +23,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

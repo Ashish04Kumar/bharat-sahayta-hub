@@ -184,6 +184,15 @@ $breakpoint-xxl: 1400px;
   font-weight: 500;
 }
 
+.text-muted-color {
+  color: hsl(var(--muted-foreground));
+
+}
+
+.text-custom-color1 {
+  color: #FC843D;
+}
+
 // Heartbeat shadow animation
 @keyframes heartbeat {
 
@@ -580,5 +589,19 @@ $breakpoint-xxl: 1400px;
 
 
     }
+  }
+}
+
+.custom-gradient-text {
+  background: rgb(35, 219, 164);
+  background: linear-gradient(81deg, rgba(35, 219, 164, 1) 0%, rgba(68, 68, 68, 1) 62%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-align: center;
+}
+
+.registration-steps-wrapper {
+  .register_role_selector_wrapper {
+    .register_role_selector_container {}
   }
 }
