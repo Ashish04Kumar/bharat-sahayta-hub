@@ -227,10 +227,10 @@ const Page: React.FC = () => {
             {currentStep === 2 && (
               <>
                 <h4 className="text-2xl font-semibold mt-8 text-custom-color1">
-                  {registerHelperTranslationData.commonTexts.header[language]}
+                  {registerHelperTranslationData?.commonTexts.header[language]}
                 </h4>
                 <p className="text-muted-color text-lg mt-1">
-                   {registerHelperTranslationData.commonTexts.desc[language]}
+                   {registerHelperTranslationData?.commonTexts.desc[language]}
                 </p>
 
                 <RegisterHelperForm
