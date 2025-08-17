@@ -1,11 +1,16 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { fetchRegisterStep1Data } from "@/services/service-clients";
+import {
+  fetchRegisterHelperTranslation,
+  fetchRegisterStep1Data,
+} from "@/services/service-clients";
 import { handleError } from "@/utils/handle-error";
 import { useLanguage } from "@/context/LanguageContext";
 import { Progress } from "@/components/ui/progress";
 import { HeartPlus, HeartHandshake, Building2, Check } from "lucide-react";
 import Loader from "@/components/common/Loader";
+import { RegisterHelperDataType } from "@/types/register-user";
+import RegisterHelperForm from "@/components/registration/RegisterHelperForm";
 
 type Role = {
   title: Record<string, string>;
@@ -78,6 +83,8 @@ const Page: React.FC = () => {
   const { language } = useLanguage();
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const [registerHelperTranslationData, setRegisterHelperTranslationData] =
+    useState<RegisterHelperDataType | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,8 +98,24 @@ const Page: React.FC = () => {
         setLoading(false);
       }
     };
-    fetchData();
-  }, []);
+    const fetchRegisterHelperData = async () => {
+      setLoading(true);
+      try {
+        const res = await fetchRegisterHelperTranslation();
+        setRegisterHelperTranslationData(res.data);
+      } catch (err) {
+        handleError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (currentStep === 1) {
+      fetchData();
+    } else if (currentStep === 2) {
+      fetchRegisterHelperData();
+    }
+  }, [currentStep]);
 
   const handleRoleClick = (role: string) => {
     setSelectedRoles((prev) =>
@@ -102,7 +125,7 @@ const Page: React.FC = () => {
 
   const t = stepTranslations[language] || stepTranslations.en;
 
-  if (loading) return <Loader />; 
+  if (loading) return <Loader />;
 
   return (
     <section className="registration-steps-wrapper mt-[60px] flex-1 bg-white">
@@ -126,7 +149,7 @@ const Page: React.FC = () => {
                 <h4 className="text-2xl font-semibold mt-8 text-custom-color1">
                   {step1TranslationData.chooseRole.title[language]}
                 </h4>
-                <p className="text-muted-color text-lg mt-2">
+                <p className="text-muted-color text-lg mt-1">
                   {step1TranslationData.chooseRole.subtitle[language]}
                 </p>
 
@@ -150,7 +173,11 @@ const Page: React.FC = () => {
                           className={`cursor-pointer register_role_selector_container p-6 
                             w-full md:w-[31%] bg-[#fbfbfa] rounded-lg 
                             transition-all duration-400 ease-in-out 
-                            hover:shadow-lg hover:border-2 hover:border-[#f97415]
+                            hover:shadow-lg hover:border-2  ${
+                              !isSelected
+                                ? "hover:border-[#f97415]"
+                                : "hover:border-blue-500"
+                            }
                             ${
                               isSelected
                                 ? "border-2 border-blue-500 shadow-lg"
@@ -194,6 +221,21 @@ const Page: React.FC = () => {
                     }
                   )}
                 </div>
+              </>
+            )}
+
+            {currentStep === 2 && (
+              <>
+                <h4 className="text-2xl font-semibold mt-8 text-custom-color1">
+                  {registerHelperTranslationData.commonTexts.header[language]}
+                </h4>
+                <p className="text-muted-color text-lg mt-1">
+                   {registerHelperTranslationData.commonTexts.desc[language]}
+                </p>
+
+                <RegisterHelperForm
+                  registerHelperTranslationData={registerHelperTranslationData}
+                />
               </>
             )}
             <hr className="mt-8" />
