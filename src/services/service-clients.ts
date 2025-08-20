@@ -78,3 +78,36 @@ export const fetchRegisterHelperTranslation = async () => {
     handleError(error);
   }
 };
+
+export const fetchRegisterNGOTranslation = async () => {
+  try {
+    const url = new URL(config.API_ENDPOINTS.FETCH_REGISTER_NGO_TRANSLATION).href;
+    const response = await fetch(url, {
+      method: "GET",
+      headers: getHeaders(),
+    });
+
+    if (response.status === config.STATUS.UNAUTHORIZED) {
+      localStorage.clear();
+      sessionStorage.clear();
+
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 3000);
+
+      throw {
+        status: config.STATUS.UNAUTHORIZED,
+        message: config.MESSAGES.ACCESS_TOKEN_EXPIRED,
+      };
+    }
+
+    if (!response.ok) {
+      const errorBody = await response.json();
+      throw errorBody?.message ? errorBody : new Error("Something went wrong");
+    }
+
+    return await response.json();
+  } catch (error) {
+    handleError(error);
+  }
+};

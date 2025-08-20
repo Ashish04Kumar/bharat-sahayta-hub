@@ -2,15 +2,29 @@
 import React, { useEffect, useState } from "react";
 import {
   fetchRegisterHelperTranslation,
+  fetchRegisterNGOTranslation,
   fetchRegisterStep1Data,
 } from "@/services/service-clients";
 import { handleError } from "@/utils/handle-error";
 import { useLanguage } from "@/context/LanguageContext";
 import { Progress } from "@/components/ui/progress";
-import { HeartPlus, HeartHandshake, Building2, Check } from "lucide-react";
+import { 
+  HeartPlus, 
+  HeartHandshake, 
+  Building2, 
+  Check, 
+  ArrowRight, 
+  ArrowLeft, 
+  CheckCircle 
+} from "lucide-react";
 import Loader from "@/components/common/Loader";
 import { RegisterHelperDataType } from "@/types/register-user";
 import RegisterHelperForm from "@/components/registration/RegisterHelperForm";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z, ZodTypeAny } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import RegisterNGOForm from "@/components/registration/RegisterNGOForm";
+import { stepTranslations } from "@/fixtures/registration/registration-translation";
 
 type Role = {
   title: Record<string, string>;
@@ -30,61 +44,158 @@ type Step1TranslationData = {
   roles: Record<string, Role>;
 };
 
-type StepTranslations = {
-  step1: string;
-  step2: string;
-  next: string;
-  prev: string;
-  complete: string;
-};
 
-const stepTranslations: Record<string, StepTranslations> = {
-  en: {
-    step1: "Step 1/2",
-    step2: "Step 2/2",
-    next: "Next",
-    prev: "Previous",
-    complete: "Complete Registration",
-  },
-  hi: {
-    step1: "चरण 1/2",
-    step2: "चरण 2/2",
-    next: "आगे",
-    prev: "पीछे",
-    complete: "पंजीकरण पूरा करें",
-  },
-  pa: {
-    step1: "ਕਦਮ 1/2",
-    step2: "ਕਦਮ 2/2",
-    next: "ਅੱਗੇ",
-    prev: "ਪਿਛੇ",
-    complete: "ਰਜਿਸਟ੍ਰੇਸ਼ਨ ਪੂਰਾ ਕਰੋ",
-  },
-  ta: {
-    step1: "படி 1/2",
-    step2: "படி 2/2",
-    next: "அடுத்து",
-    prev: "முந்தைய",
-    complete: "பதிவை நிறைவு செய்",
-  },
-  bn: {
-    step1: "ধাপ 1/2",
-    step2: "ধাপ 2/2",
-    next: "পরবর্তী",
-    prev: "পূর্ববর্তী",
-    complete: "নিবন্ধন সম্পূর্ণ করুন",
-  },
+
+const generateRegisterHelperSchema = (
+  formFields: RegisterHelperDataType["formFields"],
+  language: string
+) => {
+  if (!formFields) return z.object({});
+  const shape: Record<string, ZodTypeAny> = {};
+
+  Object.entries(formFields).forEach(([, field]) => {
+    let schema: ZodTypeAny;
+    switch (field.type) {
+      case "email":
+        schema = z.string().email(field.errorMessage[language]);
+        break;
+      case "tel":
+        schema = z.string().min(10, field.errorMessage[language]);
+        break;
+      case "text":
+        schema = z.string().min(2, field.errorMessage[language]);
+        break;
+      case "number":
+        schema = z
+          .string()
+          .regex(/^\d+$/, field.errorMessage[language])
+          .transform((val) => parseInt(val, 10));
+        break;
+      case "file":
+        schema = z
+          .any()
+          .refine((files) => files?.length > 0, field.errorMessage[language]);
+        break;
+      case "textarea":
+        schema = z.string().min(1, field.errorMessage[language]);
+        break;
+      default:
+        schema = z.string(field.errorMessage[language]);
+    }
+    if (field.required) {
+      if (schema instanceof z.ZodString) {
+        schema = schema.min(1, `${field.label.en || field.name} is required`);
+      }
+    }
+    shape[field.name] = schema;
+  });
+  return z.object(shape);
 };
 
 const Page: React.FC = () => {
   const [step1TranslationData, setStep1TranslationData] =
     useState<Step1TranslationData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true); // loader state
+  const [loading, setLoading] = useState<boolean>(true);
   const { language } = useLanguage();
-  const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+  const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(1);
+
   const [registerHelperTranslationData, setRegisterHelperTranslationData] =
     useState<RegisterHelperDataType | null>(null);
+  const [registerNGOTranslationData, setRegisterNGOrTranslationData] =
+    useState<RegisterHelperDataType | null>(null);
+  const t = stepTranslations[language] || stepTranslations.en;
+
+  const registerHelperSchema = generateRegisterHelperSchema(
+    registerHelperTranslationData?.formFields,
+    language
+  );
+
+  type FormData = z.infer<typeof registerHelperSchema>;
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormData>({
+    resolver: zodResolver(registerHelperSchema),
+    defaultValues: {},
+  });
+
+  const onSubmit: SubmitHandler<FormData> = (data) => {
+    console.log("Form submitted from parent:", data);
+  };
+
+  const handleNext = () => {
+    if (currentStep === 1) {
+      if (selectedRoles.length > 0) {
+        setCurrentStep(2);
+      }
+    } else if (currentStep === 2) {
+      if (
+        selectedRoles[0]?.title.en === "Helper" ||
+        selectedRoles[0]?.title.en === "NGO"
+      ) {
+        handleSubmit(onSubmit)();
+        setCurrentStep(3);
+      } else if (selectedRoles[0]?.title.en === "Seeker") {
+        handleSubmit(onSubmit)();
+      }
+    } else if (currentStep === 3) {
+      handleSubmit(onSubmit)();
+    }
+  };
+
+  const handleRoleClick = (role: Role) => {
+    setSelectedRoles((prev) => {
+      if (role.title.en === "NGO") {
+        return prev.some((r) => r.title.en === "NGO") ? [] : [role];
+      }
+
+      if (role.title.en === "Helper" || role.title.en === "Seeker") {
+        const newRoles = prev.filter((r) => r.title.en !== "NGO");
+
+        if (newRoles.some((r) => r.title.en === role.title.en)) {
+          return newRoles.filter((r) => r.title.en !== role.title.en);
+        } else {
+          return [...newRoles, role];
+        }
+      }
+
+      return prev;
+    });
+  };
+
+  const getProgressValue = () => {
+    if (selectedRoles.length === 0) return 0;
+
+    const role = selectedRoles[0]?.title.en;
+
+    if (role === "Seeker") {
+      return currentStep === 1 ? 50 : 100;
+    } else if (role === "Helper" || role === "NGO") {
+      if (currentStep === 1) return 33;
+      if (currentStep === 2) return 66;
+      if (currentStep === 3) return 100;
+    }
+
+    return 0;
+  };
+
+  const getStepCount = () => {
+    if (selectedRoles.length === 1 && selectedRoles[0]?.title.en === "Seeker") {
+      return `${t.step} ${currentStep}/2`;
+    } else {
+      return `${t.step} ${currentStep}/3`;
+    }
+  };
+
+  const getTotalSteps = () => {
+    if (selectedRoles.length === 1 && selectedRoles[0]?.title.en === "Seeker") {
+      return 2;
+    }
+    return 3;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -98,6 +209,7 @@ const Page: React.FC = () => {
         setLoading(false);
       }
     };
+
     const fetchRegisterHelperData = async () => {
       setLoading(true);
       try {
@@ -110,27 +222,42 @@ const Page: React.FC = () => {
       }
     };
 
+    const fetchRegisterNGOData = async () => {
+      setLoading(true);
+      try {
+        const res = await fetchRegisterNGOTranslation();
+        setRegisterNGOrTranslationData(res.data);
+      } catch (err) {
+        handleError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (currentStep === 1) {
       fetchData();
-    } else if (currentStep === 2) {
+    } else if (
+      currentStep >= 2 &&
+      selectedRoles.length > 0 &&
+      (selectedRoles.some((r) => r.title.en === "Seeker") ||
+        selectedRoles.some((r) => r.title.en === "Helper")) &&
+      !selectedRoles.some((r) => r.title.en === "NGO")
+    ) {
       fetchRegisterHelperData();
+    } else if (
+      currentStep >= 2 &&
+      selectedRoles.some((r) => r.title.en === "NGO")
+    ) {
+      fetchRegisterNGOData();
     }
-  }, [currentStep]);
-
-  const handleRoleClick = (role: string) => {
-    setSelectedRoles((prev) =>
-      prev.includes(role) ? prev.filter((r) => r !== role) : [...prev, role]
-    );
-  };
-
-  const t = stepTranslations[language] || stepTranslations.en;
+  }, [currentStep, selectedRoles]);
 
   if (loading) return <Loader />;
 
   return (
-    <section className="registration-steps-wrapper mt-[60px] flex-1 bg-white">
+    <section className="registration-steps-wrapper mt-[60px] flex-1">
       {step1TranslationData && (
-        <div className="container pt-8 pb-8">
+        <div className="max-w-4xl mx-auto pt-8 pb-8">
           <h2 className="custom-gradient-text text-4xl font-bold">
             {step1TranslationData.header.title[language]}
           </h2>
@@ -139,10 +266,14 @@ const Page: React.FC = () => {
           </p>
 
           <div className="mt-8 text-center">
-            <p className="text-lg font-semibold text-gray-600 mb-2">
-              {currentStep === 1 ? t.step1 : t.step2}
+            <p
+              className="text-start text-lg font-semibold text-gray-600 mb-0"
+              style={{ height: "29px" }}
+            >
+              {selectedRoles.length > 0 && getStepCount()}
             </p>
-            <Progress value={currentStep === 1 ? 50 : 100} />
+
+            <Progress value={getProgressValue()} />
 
             {currentStep === 1 && (
               <>
@@ -164,25 +295,26 @@ const Page: React.FC = () => {
                       if (value.title.en === "Helper") Icon = HeartHandshake;
                       if (value.title.en === "NGO") Icon = Building2;
 
-                      const isSelected = selectedRoles.includes(value.title.en);
+                      const isSelected = selectedRoles.some(
+                        (r) => r.title.en === value.title.en
+                      );
 
                       return (
                         <div
                           key={key}
-                          onClick={() => handleRoleClick(value.title.en)}
-                          className={`cursor-pointer register_role_selector_container p-6 
-                            w-full md:w-[31%] bg-[#fbfbfa] rounded-lg 
+                          onClick={() => handleRoleClick(value)}
+                          className={`
+                            cursor-pointer register_role_selector_container p-6 
+                            w-full md:w-[31%] bg-white shadow-md rounded-lg 
                             transition-all duration-400 ease-in-out 
-                            hover:shadow-lg hover:border-2  ${
-                              !isSelected
-                                ? "hover:border-[#f97415]"
-                                : "hover:border-blue-500"
-                            }
+                            border-2 border-transparent
+                            hover:shadow-lg hover:border-[#f97415]
                             ${
                               isSelected
-                                ? "border-2 border-blue-500 shadow-lg"
+                                ? "border-blue-500 shadow-lg hover:border-blue-500"
                                 : ""
-                            }`}
+                            }
+                          `}
                         >
                           <div className="flex items-center justify-between">
                             <div className="rounded-full h-14 w-14 bg-[#ebf2fd] p-2 icon_container mb-4 flex items-center justify-center">
@@ -224,55 +356,95 @@ const Page: React.FC = () => {
               </>
             )}
 
-            {currentStep === 2 && (
-              <>
-                <h4 className="text-2xl font-semibold mt-8 text-custom-color1">
-                  {registerHelperTranslationData?.commonTexts.header[language]}
-                </h4>
-                <p className="text-muted-color text-lg mt-1">
-                   {registerHelperTranslationData?.commonTexts.desc[language]}
-                </p>
+            {currentStep === 2 &&
+              selectedRoles.length >= 1 &&
+              (selectedRoles.some((r) => r.title.en === "Seeker") ||
+                selectedRoles.some((r) => r.title.en === "Helper")) &&
+              !selectedRoles.some((r) => r.title.en === "NGO") && (
+                <>
+                  <h4 className="text-2xl font-semibold mt-8 text-custom-color1">
+                    {registerHelperTranslationData?.commonTexts.header[language]}
+                  </h4>
+                  <p className="text-muted-color text-lg mt-1">
+                    {registerHelperTranslationData?.commonTexts.desc[language]}
+                  </p>
 
-                <RegisterHelperForm
-                  registerHelperTranslationData={registerHelperTranslationData}
-                />
-              </>
-            )}
+                  <RegisterHelperForm
+                    registerHelperTranslationData={registerHelperTranslationData}
+                    register={register}
+                    errors={errors}
+                    selectedRoles={selectedRoles}
+                  />
+                </>
+              )}
+
+            {currentStep === 2 &&
+              selectedRoles.length >= 1 &&
+              selectedRoles.some((r) => r.title.en === "NGO") && (
+                <>
+                  <h4 className="text-2xl font-semibold mt-8 text-custom-color1">
+                    {registerNGOTranslationData?.commonTexts.header[language]}
+                  </h4>
+                  <p className="text-muted-color text-lg mt-1">
+                    {registerNGOTranslationData?.commonTexts.desc[language]}
+                  </p>
+
+                  <RegisterNGOForm
+                    registerNGOTranslationData={registerNGOTranslationData}
+                    register={register}
+                    errors={errors}
+                    selectedRoles={selectedRoles}
+                  />
+                </>
+              )}
+
+            {currentStep === 3 && selectedRoles.length > 0 && <></>}
+
             <hr className="mt-8" />
             <div className="flex justify-between mt-6">
-              {currentStep === 2 ? (
+              {currentStep > 1 ? (
                 <>
                   <button
-                    onClick={() => setCurrentStep(1)}
-                    className="px-6 py-2 bg-gray-300 rounded-lg hover:bg-gray-400"
+                    onClick={() => setCurrentStep((prev) => prev - 1)}
+                    className="justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 flex items-center gap-2"
                   >
+                    <ArrowLeft size={16} />
                     {t.prev}
                   </button>
 
                   <button
-                    onClick={() => alert("🎉 Registration Completed!")}
-                    className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600"
+                    onClick={handleNext}
+                    className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center gap-2"
                   >
-                    {t.complete}
+                    {currentStep === getTotalSteps() ? (
+                      <>
+                        <CheckCircle size={16} />
+                        {t.complete}
+                      </>
+                    ) : (
+                      <>
+                        {t.next}
+                        <ArrowRight size={16} />
+                      </>
+                    )}
                   </button>
                 </>
               ) : (
                 <div className="flex justify-end w-full">
                   <button
-                    onClick={() =>
-                      selectedRoles.length > 0 && setCurrentStep(2)
-                    }
+                    onClick={handleNext}
                     disabled={selectedRoles.length === 0}
                     className={`
-      px-6 py-2 rounded-lg text-white font-semibold transition-all duration-300
-      ${
-        selectedRoles.length > 0
-          ? "bg-gradient-to-r from-[#fd843d] to-[#f97415] hover:from-[#f97415] hover:to-[#fd843d]"
-          : "bg-[#fd843d]/50 cursor-not-allowed"
-      }
-    `}
+                      px-6 py-2 rounded-lg text-white font-semibold transition-all duration-300 flex items-center gap-2
+                      ${
+                        selectedRoles.length > 0
+                          ? "bg-gradient-to-r from-[#fd843d] to-[#f97415] hover:from-[#f97415] hover:to-[#fd843d]"
+                          : "bg-[#fd843d]/50 cursor-not-allowed"
+                      }
+                    `}
                   >
                     {t.next}
+                    <ArrowRight size={16} />
                   </button>
                 </div>
               )}
