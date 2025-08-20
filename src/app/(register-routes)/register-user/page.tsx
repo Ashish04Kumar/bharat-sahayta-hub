@@ -52,6 +52,9 @@ const generateRegisterHelperSchema = (
   const shape: Record<string, ZodTypeAny> = {};
 
   Object.entries(formFields).forEach(([, field]) => {
+    if (!field.required) {
+      return;
+    }
     let schema: ZodTypeAny;
     switch (field.type) {
       case "email":
@@ -90,6 +93,54 @@ const generateRegisterHelperSchema = (
   return z.object(shape);
 };
 
+const generateRegisterNGOSchema = (
+  formFields: RegisterHelperDataType["formFields"],
+  language: string
+) => {
+  if (!formFields) return z.object({});
+  const shape: Record<string, ZodTypeAny> = {};
+
+  Object.entries(formFields).forEach(([, field]) => {
+    let schema: ZodTypeAny;
+    if (!field.required) {
+      return;
+    }
+    switch (field.type) {
+      case "email":
+        schema = z.string().email(field.errorMessage[language]);
+        break;
+      case "tel":
+        schema = z.string().min(10, field.errorMessage[language]);
+        break;
+      case "text":
+        schema = z.string().min(2, field.errorMessage[language]);
+        break;
+      case "number":
+        schema = z
+          .string()
+          .regex(/^\d+$/, field.errorMessage[language])
+          .transform((val) => parseInt(val, 10));
+        break;
+      case "file":
+        schema = z
+          .any()
+          .refine((files) => files?.length > 0, field.errorMessage[language]);
+        break;
+      case "textarea":
+        schema = z.string().min(1, field.errorMessage[language]);
+        break;
+      default:
+        schema = z.string(field.errorMessage[language]);
+    }
+    if (field.required) {
+      if (schema instanceof z.ZodString) {
+        schema = schema.min(1, `${field.label.en || field.name} is required`);
+      }
+    }
+    shape[field.name] = schema;
+  });
+  return z.object(shape);
+};
 const Page: React.FC = () => {
   const [step1TranslationData, setStep1TranslationData] =
     useState<Step1TranslationData | null>(null);
@@ -108,15 +159,25 @@ const Page: React.FC = () => {
     registerHelperTranslationData?.formFields,
     language
   );
+  const registerNGOSchema = generateRegisterNGOSchema(
+    registerNGOTranslationData?.formFields,
+    language
+  );
 
   type FormData = z.infer<typeof registerHelperSchema>;
+
+  const activeResolver = selectedRoles.find((obj) => obj.title.en === "NGO")
+    ? registerNGOSchema
+    : registerHelperSchema;
 
   const {
     register,
     handleSubmit,
+    clearErrors,
     formState: { errors },
+    trigger,
   } = useForm<FormData>({
-    resolver: zodResolver(registerHelperSchema),
+    resolver: zodResolver(activeResolver),
     defaultValues: {},
   });
 
@@ -124,12 +185,14 @@ const Page: React.FC = () => {
     console.log("Form submitted from parent:", data);
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (currentStep === 1) {
       if (selectedRoles.length > 0) {
         setCurrentStep(2);
       }
     } else if (currentStep === 2) {
+      const isStepValid = await trigger();
+      if (!isStepValid) return;
       if (
         selectedRoles[0]?.title.en === "Helper" ||
         selectedRoles[0]?.title.en === "NGO"
@@ -140,6 +203,8 @@ const Page: React.FC = () => {
         handleSubmit(onSubmit)();
       }
     } else if (currentStep === 3) {
+      const isStepValid = await trigger();
+      if (!isStepValid) return;
       handleSubmit(onSubmit)();
     }
   };
@@ -166,7 +231,10 @@ const Page: React.FC = () => {
 
   const getProgressValue = () => {
     if (selectedRoles.length === 0) return 0;
-    if (selectedRoles.length === 1 && selectedRoles[0].title.en === "Seeker") {
+    else if (
+      selectedRoles.length === 1 &&
+      selectedRoles[0].title.en === "Seeker"
+    ) {
       return currentStep === 1 ? 50 : 100;
     } else {
       if (currentStep === 1) {
@@ -174,7 +242,7 @@ const Page: React.FC = () => {
       } else if (currentStep === 2) {
         return 66;
       } else {
-        return 33;
+        return 100;
       }
     }
   };
@@ -232,6 +300,7 @@ const Page: React.FC = () => {
     };
 
     if (currentStep === 1) {
+      clearErrors();
       fetchData();
     } else if (
       currentStep >= 2 &&
@@ -247,14 +316,14 @@ const Page: React.FC = () => {
     ) {
       fetchRegisterNGOData();
     }
-  }, [currentStep, selectedRoles]);
+  }, [currentStep]);
 
   if (loading) return <Loader />;
 
   return (
     <section className="registration-steps-wrapper mt-[60px] flex-1">
       {step1TranslationData && (
-        <div className="max-w-4xl mx-auto pt-8 pb-8">
+        <div className="max-w-5xl mx-auto container pt-8 pb-8">
           <h2 className="custom-gradient-text text-4xl font-bold">
             {step1TranslationData.header.title[language]}
           </h2>
@@ -417,6 +486,7 @@ const Page: React.FC = () => {
 
                   <button
                     onClick={handleNext}
+                    disabled={Object.keys(errors).length > 0}
                     className="px-6 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 flex items-center gap-2"
                   >
                     {currentStep === getTotalSteps() ? (
