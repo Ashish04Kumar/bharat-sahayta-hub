@@ -8,14 +8,14 @@ import {
 import { handleError } from "@/utils/handle-error";
 import { useLanguage } from "@/context/LanguageContext";
 import { Progress } from "@/components/ui/progress";
-import { 
-  HeartPlus, 
-  HeartHandshake, 
-  Building2, 
-  Check, 
-  ArrowRight, 
-  ArrowLeft, 
-  CheckCircle 
+import {
+  HeartPlus,
+  HeartHandshake,
+  Building2,
+  Check,
+  ArrowRight,
+  ArrowLeft,
+  CheckCircle,
 } from "lucide-react";
 import Loader from "@/components/common/Loader";
 import { RegisterHelperDataType } from "@/types/register-user";
@@ -43,8 +43,6 @@ type Step1TranslationData = {
   };
   roles: Record<string, Role>;
 };
-
-
 
 const generateRegisterHelperSchema = (
   formFields: RegisterHelperDataType["formFields"],
@@ -168,18 +166,17 @@ const Page: React.FC = () => {
 
   const getProgressValue = () => {
     if (selectedRoles.length === 0) return 0;
-
-    const role = selectedRoles[0]?.title.en;
-
-    if (role === "Seeker") {
+    if (selectedRoles.length === 1 && selectedRoles[0].title.en === "Seeker") {
       return currentStep === 1 ? 50 : 100;
-    } else if (role === "Helper" || role === "NGO") {
-      if (currentStep === 1) return 33;
-      if (currentStep === 2) return 66;
-      if (currentStep === 3) return 100;
+    } else {
+      if (currentStep === 1) {
+        return 33;
+      } else if (currentStep === 2) {
+        return 66;
+      } else {
+        return 33;
+      }
     }
-
-    return 0;
   };
 
   const getStepCount = () => {
@@ -363,14 +360,20 @@ const Page: React.FC = () => {
               !selectedRoles.some((r) => r.title.en === "NGO") && (
                 <>
                   <h4 className="text-2xl font-semibold mt-8 text-custom-color1">
-                    {registerHelperTranslationData?.commonTexts.header[language]}
+                    {
+                      registerHelperTranslationData?.commonTexts.header[
+                        language
+                      ]
+                    }
                   </h4>
                   <p className="text-muted-color text-lg mt-1">
                     {registerHelperTranslationData?.commonTexts.desc[language]}
                   </p>
 
                   <RegisterHelperForm
-                    registerHelperTranslationData={registerHelperTranslationData}
+                    registerHelperTranslationData={
+                      registerHelperTranslationData
+                    }
                     register={register}
                     errors={errors}
                     selectedRoles={selectedRoles}
