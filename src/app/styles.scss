@@ -601,7 +601,21 @@ $breakpoint-xxl: 1400px;
 }
 
 .registration-steps-wrapper {
+  background: linear-gradient(to bottom, #f7f7f7, #f9f7f6);
+
   .register_role_selector_wrapper {
     .register_role_selector_container {}
   }
+
+  .register-helper-form {}
 }
+
+
+input,
+textarea {
+  &::placeholder {
+    color: hsl(var(--muted-foreground)) !important;
+    font-size: 15px;
+  }
+}
+

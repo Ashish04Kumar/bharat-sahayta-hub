@@ -176,8 +176,8 @@ export const config = {
     UNAUTHORIZED: 401,
   },
   API_ENDPOINTS: {
-    //  GET_USER_BY_TOKEN: new URL(`${BASE_API_ENDPOINT}/user/get-user-by-token`),
     FETCH_STEP1_TRANSLATION: new URL(`${BASE_API_ENDPOINT}/register-step-1-translation`),
     FETCH_REGISTER_HELPER_TRANSLATION: new URL(`${BASE_API_ENDPOINT}/register-helper-translation`),
+    FETCH_REGISTER_NGO_TRANSLATION: new URL(`${BASE_API_ENDPOINT}/register-ngo-translation`),
   },
 };
