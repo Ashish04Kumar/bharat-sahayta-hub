@@ -18,3 +18,48 @@ export type RegisterHelperDataType = {
   }[];
   commonTexts: Record<string, Record<string, string>>;
 };
+
+// --------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------------------------------------------// Multilingual text
+type MultiLangText = {
+  en: string;
+  hi: string;
+  pa: string;
+  ta: string;
+  bn: string;
+};
+
+
+type FormField = {
+  sequence: number;
+  name: string;
+  type: string;
+  required: boolean;
+  label: MultiLangText;
+  placeholder: MultiLangText;
+  errorMessage: MultiLangText;
+};
+
+type DropdownOption = {
+  value: string;
+  label: MultiLangText;
+};
+
+export type OrganizationDetailsDataType = {
+  formFields: {
+    organizationName: FormField;
+    email: FormField;
+    phoneNumber: FormField;
+    state: FormField;
+    city: FormField;
+    registrationNumber: FormField;
+    website: FormField;
+    organizationDesc: FormField;
+  };
+  indianStates: DropdownOption[];
+  commonTexts: {
+    header: MultiLangText;
+    desc: MultiLangText;
+    selectedRoles: MultiLangText;
+  };
+};

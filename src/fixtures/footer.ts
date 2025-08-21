@@ -1,6 +1,6 @@
 export const footerText = {
   en: {
-    aboutTitle: "SahayataMap",
+    aboutTitle: "Bharat Sahayta Hub",
     aboutSubtitle: "Help Network",
     aboutDesc:
       "Building India's most compassionate community through real-time help mapping. Every act of kindness creates ripples of positive change.",
@@ -20,7 +20,7 @@ export const footerText = {
     privacyPolicy: "Privacy Policy",
     terms: "Terms of Service",
     copyright:
-      "© 2024 SahayataMap. All rights reserved. Building bridges of compassion.",
+      "© 2025 Bharat Sahayta Hub. All rights reserved. Building bridges of compassion.",
   },
   hi: {
     aboutTitle: "सहायता मैप",
