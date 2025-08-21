@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import {
+  fetchRegisterHelperPrefrencesTranslation,
   fetchRegisterHelperTranslation,
   fetchRegisterNGOTranslation,
   fetchRegisterStep1Data,
@@ -18,13 +19,16 @@ import {
   CheckCircle,
 } from "lucide-react";
 import Loader from "@/components/common/Loader";
-import { RegisterHelperDataType } from "@/types/register-user";
+import {
+  RegisterHelperDataType,
+} from "@/types/register-user";
 import RegisterHelperForm from "@/components/registration/RegisterHelperForm";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z, ZodTypeAny } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import RegisterNGOForm from "@/components/registration/RegisterNGOForm";
 import { stepTranslations } from "@/fixtures/registration/registration-translation";
+import RegisterHelperPrefrencesForm from "@/components/registration/RegisterHelperPrefrencesForm";
 
 type Role = {
   title: Record<string, string>;
@@ -153,6 +157,10 @@ const Page: React.FC = () => {
     useState<RegisterHelperDataType | null>(null);
   const [registerNGOTranslationData, setRegisterNGOrTranslationData] =
     useState<RegisterHelperDataType | null>(null);
+  const [
+    registerHelperPrefrencesTranslationData,
+    setRegisterHelperPrefrencesTranslationData,
+  ] = useState<any | null>(null);
   const t = stepTranslations[language] || stepTranslations.en;
 
   const registerHelperSchema = generateRegisterHelperSchema(
@@ -179,6 +187,8 @@ const Page: React.FC = () => {
   } = useForm<FormData>({
     resolver: zodResolver(activeResolver),
     defaultValues: {},
+    mode: "onChange",
+    reValidateMode: "onChange",
   });
 
   const onSubmit: SubmitHandler<FormData> = (data) => {
@@ -193,14 +203,14 @@ const Page: React.FC = () => {
     } else if (currentStep === 2) {
       const isStepValid = await trigger();
       if (!isStepValid) return;
+
       if (
-        selectedRoles[0]?.title.en === "Helper" ||
-        selectedRoles[0]?.title.en === "NGO"
+        selectedRoles.length === 1 &&
+        selectedRoles[0]?.title.en === "Seeker"
       ) {
         handleSubmit(onSubmit)();
+      } else {
         setCurrentStep(3);
-      } else if (selectedRoles[0]?.title.en === "Seeker") {
-        handleSubmit(onSubmit)();
       }
     } else if (currentStep === 3) {
       const isStepValid = await trigger();
@@ -299,22 +309,35 @@ const Page: React.FC = () => {
       }
     };
 
+    const fetchHelperPrefrencesData = async () => {
+      setLoading(true);
+      try {
+        const res = await fetchRegisterHelperPrefrencesTranslation();
+        setRegisterHelperPrefrencesTranslationData(res.data);
+      } catch (err) {
+        handleError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     if (currentStep === 1) {
       clearErrors();
       fetchData();
     } else if (
-      currentStep >= 2 &&
+      currentStep === 2 &&
       selectedRoles.length > 0 &&
       (selectedRoles.some((r) => r.title.en === "Seeker") ||
-        selectedRoles.some((r) => r.title.en === "Helper")) &&
-      !selectedRoles.some((r) => r.title.en === "NGO")
+        selectedRoles.some((r) => r.title.en === "Helper"))
     ) {
       fetchRegisterHelperData();
     } else if (
-      currentStep >= 2 &&
+      currentStep == 2 &&
       selectedRoles.some((r) => r.title.en === "NGO")
     ) {
       fetchRegisterNGOData();
+    } else {
+      fetchHelperPrefrencesData();
     }
   }, [currentStep]);
 
@@ -451,7 +474,6 @@ const Page: React.FC = () => {
               )}
 
             {currentStep === 2 &&
-              selectedRoles.length >= 1 &&
               selectedRoles.some((r) => r.title.en === "NGO") && (
                 <>
                   <h4 className="text-2xl font-semibold mt-8 text-custom-color1">
@@ -470,7 +492,34 @@ const Page: React.FC = () => {
                 </>
               )}
 
-            {currentStep === 3 && selectedRoles.length > 0 && <></>}
+            {currentStep === 3 && (
+              <>
+                {console.log("87i67u65yt", currentStep, selectedRoles)}
+                <h4 className="text-2xl font-semibold mt-8 text-custom-color1">
+                  {
+                    registerHelperPrefrencesTranslationData?.formHeader[
+                      language
+                    ]
+                  }
+                </h4>
+                <p className="text-muted-color text-lg mt-1">
+                  {
+                    registerHelperPrefrencesTranslationData?.formSubHeader[
+                      language
+                    ]
+                  }
+                </p>
+
+                <RegisterHelperPrefrencesForm
+                  registerHelperPrefrencesTranslationData={
+                    registerHelperPrefrencesTranslationData
+                  }
+                  register={register}
+                  errors={errors}
+                  selectedRoles={selectedRoles}
+                />
+              </>
+            )}
 
             <hr className="mt-8" />
             <div className="flex justify-between mt-6">

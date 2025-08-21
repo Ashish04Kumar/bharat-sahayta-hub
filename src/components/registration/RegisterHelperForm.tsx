@@ -43,7 +43,6 @@ const RegisterHelperForm: React.FC<RegisterHelperFormProps> = ({
       if (fieldName.toLowerCase().includes(key)) return iconMap[key];
     return User;
   };
-  console.log("I^&kjh5y", selectedRoles);
 
   return (
     <div className="w-full bg-white border border-input shadow-md rounded-xl overflow-hidden mt-4 p-6 pt-8">
@@ -81,10 +80,12 @@ const RegisterHelperForm: React.FC<RegisterHelperFormProps> = ({
                             })}
                             className="w-full pl-10 pr-2 py-[10px] border-2 border-input rounded-xl bg-white text-[#374151] focus:border-[#e97431] focus:ring-4 focus:ring-[#e97431]/10 focus:outline-none transition-all duration-300 appearance-none cursor-pointer text-base"
                           >
-                            <option value="" disabled>
-                              <p className="text-md font-semibold text-[#374151] flex items-center gap-1">
-                                {field.placeholder[language]}{" "}
-                              </p>
+                            <option
+                              value=""
+                              disabled
+                              className="text-md font-semibold text-[#374151] flex items-center gap-1"
+                            >
+                              {field.placeholder[language]}{" "}
                             </option>
                             {field.name === "state" &&
                               registerHelperTranslationData.indianStates.map(
