@@ -3,13 +3,16 @@ import React from "react";
 import { useLanguage } from "@/context/LanguageContext";
 import { footerText } from "@/fixtures/footer";
 import { MapPin } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 const CommonFooter = () => {
   const { language } = useLanguage();
   const t = footerText[language] || footerText.en;
-
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
+  // footer-wrapper-homepage-bg
   return (
-    <footer className="footer-wrapper  pt-5 md:pt-10 pb-6 border-t">
+    <footer className={`footer-wrapper  pt-5 md:pt-10 pb-6 border-t ${isHomePage ?  "footer-wrapper-homepage-bg" :  "footer-wrapper-bg"}`}>
       <div className="container mx-auto flex flex-col md:flex-row md:justify-between gap-5 md:gap-10 px-4">
         <div className="footer-about max-w-sm">
           <div className="flex gap-2">
@@ -18,7 +21,9 @@ const CommonFooter = () => {
             </div>
             <div>
               {" "}
-              <h2 className="text-dark text-xl font-bold text-black">{t.aboutTitle}</h2>
+              <h2 className="text-dark text-xl font-bold text-black">
+                {t.aboutTitle}
+              </h2>
               <p className="text-sm text-muted-foreground">{t.aboutSubtitle}</p>
             </div>
           </div>
@@ -27,7 +32,9 @@ const CommonFooter = () => {
         </div>
 
         <div className="footer-links">
-          <h3 className="text-dark text-lg font-semibold mb-3">{t.quickLinksTitle}</h3>
+          <h3 className="text-dark text-lg font-semibold mb-3">
+            {t.quickLinksTitle}
+          </h3>
           <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
             {t.quickLinks.map((link, idx) => (
               <li key={idx} className="hover:text-orange-500 cursor-pointer">
@@ -38,7 +45,9 @@ const CommonFooter = () => {
         </div>
 
         <div className="footer-contact">
-          <h3 className="text-dark text-lg font-semibold mb-3">{t.contactTitle}</h3>
+          <h3 className="text-dark text-lg font-semibold mb-3">
+            {t.contactTitle}
+          </h3>
           <ul className="space-y-2 text-sm md:text-base text-muted-foreground">
             <li>📞 {t.contactPhone}</li>
             <li>📧 {t.contactEmail}</li>
@@ -48,9 +57,7 @@ const CommonFooter = () => {
       </div>
 
       {/* Bottom Section */}
-      <div className="footer-bottom flex flex-col md:flex-row justify-between items-center mt-8 pt-2 md:pt-4 px-4 text-sm text-gray-500 border-t"
-     
-      >
+      <div className="footer-bottom flex flex-col md:flex-row justify-between items-center mt-8 pt-2 md:pt-4 px-4 text-sm text-gray-500 border-t">
         <p>{t.copyright}</p>
         <div className="flex gap-4 mt-3 md:mt-0">
           <span className="hover:text-orange-500 cursor-pointer">

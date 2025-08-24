@@ -385,6 +385,18 @@ $breakpoint-xxl: 1400px;
   }
 }
 
+.footer-wrapper-homepage-bg {
+  background: linear-gradient(to bottom, #fdfdfc 0%, #ececeb 50%, #e9e9dc 100%);
+
+
+}
+
+.footer-wrapper-bg {
+  background: white;
+
+
+}
+
 .detailed_user_journey_wrapper {
   .journey-card {
     background: linear-gradient(135deg,
@@ -398,7 +410,7 @@ $breakpoint-xxl: 1400px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     border-radius: 1rem;
     padding: 2rem;
-    height: 500px;
+    min-height: 500px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -618,4 +630,3 @@ textarea {
     font-size: 15px;
   }
 }
-

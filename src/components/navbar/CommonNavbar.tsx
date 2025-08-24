@@ -4,12 +4,17 @@ import { MapPin, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { useLanguage } from "../../context/LanguageContext";
 import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 const CommonNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { language, changeLanguage } = useLanguage();
+  const pathname = usePathname();
+  const isHomePage = pathname === "/";
+  const isloginPage = pathname === "/login";
+  const isRegisterPage = pathname === "/register-user";
 
-  const t = translations[language] || translations["en"]; 
+  const t = translations[language] || translations["en"];
 
   const navItems = [
     { label: t.nav.howItWorks, href: "#how-it-works" },
@@ -30,13 +35,16 @@ const CommonNavbar = () => {
     changeLanguage(e.target.value as typeof language);
   };
 
-  const router = useRouter()
+  const router = useRouter();
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b border-border/50 common-nav-wrapper">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <div className="flex items-center gap-2 cursor-pointer" onClick={() => router.push("/")} >
+          <div
+            className="flex items-center gap-2 cursor-pointer"
+            onClick={() => router.push("/")}
+          >
             <div className="w-10 h-10 bg-gradient-hero rounded-full flex items-center justify-center shadow-warm-gradient">
               <MapPin className="w-6 h-6 text-white" />
             </div>
@@ -51,17 +59,19 @@ const CommonNavbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
-              <a
-                key={item.label}
-                href={item.href}
-                className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
-              >
-                {item.label}
-              </a>
-            ))}
-          </nav>
+          {isHomePage && (
+            <nav className="hidden md:flex items-center space-x-8">
+              {navItems.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+                >
+                  {item.label}
+                </a>
+              ))}
+            </nav>
+          )}
 
           {/* Right side buttons */}
           <div className="hidden md:flex items-center gap-4">
@@ -78,10 +88,22 @@ const CommonNavbar = () => {
               ))}
             </select>
 
-            <button className="font-medium text-dark">{t.buttons.signIn}</button>
-            <button className="shadow-warm-gradient p-2 pr-[16px] pl-[16px] text-white rounded-2xl cursor-pointer font-medium" onClick={() => router.push("/register-user")}>
-              {t.buttons.joinNetwork}
-            </button>
+            {!isloginPage && (
+              <button
+                className="font-medium text-dark"
+                onClick={() => router.push("/login")}
+              >
+                {t.buttons.signIn}
+              </button>
+            )}
+            {!isRegisterPage && (
+              <button
+                className="shadow-warm-gradient p-2 pr-[16px] pl-[16px] text-white rounded-2xl cursor-pointer font-medium"
+                onClick={() => router.push("/register-user")}
+              >
+                {t.buttons.joinNetwork}
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -125,8 +147,22 @@ const CommonNavbar = () => {
               </select>
 
               <div className="flex flex-col gap-3 pt-4 border-t border-border/50">
-                <button className="banner-help-btn">{t.buttons.signIn}</button>
-                <button className="banner-sos-btn cursor-pointer" onClick={() => router.push("/register-user")}>{t.buttons.joinNetwork}</button>
+                {!isloginPage && (
+                  <button
+                    className="banner-help-btn"
+                    onClick={() => router.push("/login")}
+                  >
+                    {t.buttons.signIn}
+                  </button>
+                )}
+                {!isRegisterPage && (
+                  <button
+                    className="banner-sos-btn cursor-pointer"
+                    onClick={() => router.push("/register-user")}
+                  >
+                    {t.buttons.joinNetwork}
+                  </button>
+                )}
               </div>
             </nav>
           </div>

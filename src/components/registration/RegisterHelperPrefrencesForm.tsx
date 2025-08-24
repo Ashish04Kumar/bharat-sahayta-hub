@@ -23,11 +23,12 @@ type RegisterHelperFormProps = {
 const RegisterHelperPrefrencesForm: React.FC<RegisterHelperFormProps> = ({
   registerHelperPrefrencesTranslationData,
   register,
-  // errors,
+  errors,
   // selectedRoles,
 }) => {
   const { language } = useLanguage();
 
+  console.log("87i7uy64", errors);
   const getHelpCategoriesIcon = (name: string): React.ReactNode => {
     switch (name) {
       case "healthcare":
@@ -50,8 +51,20 @@ const RegisterHelperPrefrencesForm: React.FC<RegisterHelperFormProps> = ({
         return null;
     }
   };
+
+  const renderError = (fieldName: string) => {
+    if (errors?.[fieldName]) {
+      return (
+        <div className="text-start flex items-center gap-2 mt-2 text-red-600">
+          <AlertTriangle className="w-4 h-4 flex-shrink-0" />
+          <p className="text-sm font-medium">{errors[fieldName]?.message}</p>
+        </div>
+      );
+    }
+    return null;
+  };
   return (
-    <div className=" overflow-hidden mt-4 p-6 pt-8">
+    <div className=" overflow-hidden mt-4   pt-8">
       {registerHelperPrefrencesTranslationData && (
         <form className="register-helper-form grid grid-cols-1 md:grid-cols-2 gap-5">
           <div className="bg-white border border-input shadow-sm rounded-xl  p-4 pt-6">
@@ -82,12 +95,10 @@ const RegisterHelperPrefrencesForm: React.FC<RegisterHelperFormProps> = ({
                     >
                       <input
                         id={obj.name}
-                        type={obj.type}
+                        type="checkbox"
                         value={obj.name}
-                        {...register(
-                          registerHelperPrefrencesTranslationData.helpCategories
-                            .formFields.commonFieldName
-                        )}
+                        {...register(registerHelperPrefrencesTranslationData.helpCategories.formFields
+                  .commonFieldName)}
                       />
                       {getHelpCategoriesIcon(obj.name)}
                       <label
@@ -101,6 +112,8 @@ const RegisterHelperPrefrencesForm: React.FC<RegisterHelperFormProps> = ({
                 }
               )}
             </div>
+            {renderError(registerHelperPrefrencesTranslationData.helpCategories.formFields
+                  .commonFieldName)}
           </div>
           <div className="flex flex-col gap-5">
             <div className="bg-white border border-input shadow-sm rounded-xl  p-4 pt-6">
@@ -128,6 +141,7 @@ const RegisterHelperPrefrencesForm: React.FC<RegisterHelperFormProps> = ({
                     registerHelperPrefrencesTranslationData.availability
                       .formFields.name
                   )}
+                  defaultValue=""
                   className="w-full pl-10 pr-2 py-[10px] border-2 border-input rounded-xl bg-white text-[#374151] focus:border-[#e97431] focus:ring-4 focus:ring-[#e97431]/10 focus:outline-none transition-all duration-300 appearance-none cursor-pointer text-base"
                 >
                   <option value="" disabled hidden>
@@ -146,6 +160,10 @@ const RegisterHelperPrefrencesForm: React.FC<RegisterHelperFormProps> = ({
                   )}
                 </select>
               </div>
+              {renderError(
+                registerHelperPrefrencesTranslationData.availability.formFields
+                  .name
+              )}
             </div>
             <div className="bg-white border border-input shadow-sm rounded-xl  p-4 pt-6">
               <div className="flex gap-2">
@@ -172,6 +190,7 @@ const RegisterHelperPrefrencesForm: React.FC<RegisterHelperFormProps> = ({
                     registerHelperPrefrencesTranslationData.locationRange
                       .formFields.name
                   )}
+                  defaultValue=""
                   className="w-full pl-10 pr-2 py-[10px] border-2 border-input rounded-xl bg-white text-[#374151] focus:border-[#e97431] focus:ring-4 focus:ring-[#e97431]/10 focus:outline-none transition-all duration-300 appearance-none cursor-pointer text-base"
                 >
                   <option value="" disabled hidden>
@@ -190,6 +209,10 @@ const RegisterHelperPrefrencesForm: React.FC<RegisterHelperFormProps> = ({
                   )}
                 </select>
               </div>
+              {renderError(
+                registerHelperPrefrencesTranslationData.locationRange.formFields
+                  .name
+              )}
             </div>
             <div className="bg-white border border-input shadow-sm rounded-xl  p-4">
               <h3 className="text-2xl font-semibold leading-none tracking-tight flex items-center gap-2">
@@ -236,6 +259,10 @@ const RegisterHelperPrefrencesForm: React.FC<RegisterHelperFormProps> = ({
                   }
                 )}
               </div>
+              {renderError(
+                registerHelperPrefrencesTranslationData.typeOfHelp.formFields
+                  .commonFieldName
+              )}
             </div>
           </div>
         </form>
