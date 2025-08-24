@@ -14,7 +14,7 @@ const indiaCenter = {
 };
 
 // Example: Generate random markers within India's lat/lng bounds
-function getRandomMarkers(count) {
+function getRandomMarkers(count: number) {
   const markers = [];
   const latMin = 8.4;
   const latMax = 37.6;

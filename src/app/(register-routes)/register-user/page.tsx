@@ -19,9 +19,7 @@ import {
   CheckCircle,
 } from "lucide-react";
 import Loader from "@/components/common/Loader";
-import {
-  RegisterHelperDataType,
-} from "@/types/register-user";
+import { RegisterHelperDataType } from "@/types/register-user";
 import RegisterHelperForm from "@/components/registration/RegisterHelperForm";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z, ZodTypeAny } from "zod";
@@ -145,6 +143,42 @@ const generateRegisterNGOSchema = (
   });
   return z.object(shape);
 };
+
+const generateHelperPrefrenceSchema = (
+  helperPrefrencesFormFields: any,
+  language: string
+) => {
+  if (!helperPrefrencesFormFields) return z.object({});
+
+  console.log("8i67u6y5t", helperPrefrencesFormFields);
+  const shape: Record<string, ZodTypeAny> = {};
+
+  Object.entries(helperPrefrencesFormFields).forEach(([, field]: any) => {
+    if (!field?.required) return;
+    let schema: ZodTypeAny | undefined;
+    switch (field.type) {
+      case "checkbox":
+        schema = z
+          .array(z.string())
+          .min(1, field.errorMessage.label[language])
+          .default([]);
+        break;
+      case "dropdown":
+        schema = z.string().nonempty(field.errorMessage.label[language]);
+        break;
+      default:
+        schema = z.string().optional();
+        break;
+    }
+
+    if (schema) {
+      shape[field.name || field.commonFieldName] = schema;
+    }
+  });
+
+  return z.object(shape);
+};
+
 const Page: React.FC = () => {
   const [step1TranslationData, setStep1TranslationData] =
     useState<Step1TranslationData | null>(null);
@@ -161,6 +195,8 @@ const Page: React.FC = () => {
     registerHelperPrefrencesTranslationData,
     setRegisterHelperPrefrencesTranslationData,
   ] = useState<any | null>(null);
+  const [allFormData, setAllFormData] = useState<any>({}); // 🔹 for storing all steps data
+
   const t = stepTranslations[language] || stepTranslations.en;
 
   const registerHelperSchema = generateRegisterHelperSchema(
@@ -171,22 +207,49 @@ const Page: React.FC = () => {
     registerNGOTranslationData?.formFields,
     language
   );
+  const helperPrefrencesFormFields = [];
 
-  type FormData = z.infer<typeof registerHelperSchema>;
+  helperPrefrencesFormFields.push(
+    registerHelperPrefrencesTranslationData?.helpCategories.formFields
+  );
+  helperPrefrencesFormFields.push(
+    registerHelperPrefrencesTranslationData?.availability.formFields
+  );
+  helperPrefrencesFormFields.push(
+    registerHelperPrefrencesTranslationData?.locationRange.formFields
+  );
+  helperPrefrencesFormFields.push(
+    registerHelperPrefrencesTranslationData?.typeOfHelp.formFields
+  );
 
-  const activeResolver = selectedRoles.find((obj) => obj.title.en === "NGO")
-    ? registerNGOSchema
-    : registerHelperSchema;
+  const helperPrefrenceSchema = generateHelperPrefrenceSchema(
+    helperPrefrencesFormFields,
+    language
+  );
 
+  let activeResolver: any;
+  if (currentStep === 3) {
+    activeResolver = helperPrefrenceSchema;
+  } else {
+    activeResolver = selectedRoles.find((obj) => obj.title.en === "NGO")
+      ? registerNGOSchema
+      : registerHelperSchema;
+  }
+
+  type FormData = z.infer<typeof activeResolver>;
   const {
     register,
     handleSubmit,
     clearErrors,
     formState: { errors },
     trigger,
+    getValues,
   } = useForm<FormData>({
     resolver: zodResolver(activeResolver),
-    defaultValues: {},
+    defaultValues: {
+      helpCategories: [],
+      typeOfHelp: [],
+    },
     mode: "onChange",
     reValidateMode: "onChange",
   });
@@ -196,26 +259,33 @@ const Page: React.FC = () => {
   };
 
   const handleNext = async () => {
+    const isStepValid = await trigger();
+    if (!isStepValid) return;
+
+    const currentData = getValues();
+    setAllFormData((prev: any) => ({ ...prev, ...currentData }));
+
     if (currentStep === 1) {
       if (selectedRoles.length > 0) {
         setCurrentStep(2);
       }
     } else if (currentStep === 2) {
-      const isStepValid = await trigger();
-      if (!isStepValid) return;
-
       if (
         selectedRoles.length === 1 &&
         selectedRoles[0]?.title.en === "Seeker"
       ) {
-        handleSubmit(onSubmit)();
+        // 🔹 Final submit here (Step2 is last for Seeker)
+        handleSubmit(() =>
+          onSubmit({ ...allFormData, ...currentData, selectedRoles })
+        )();
       } else {
         setCurrentStep(3);
       }
     } else if (currentStep === 3) {
-      const isStepValid = await trigger();
-      if (!isStepValid) return;
-      handleSubmit(onSubmit)();
+      // 🔹 Final submit with merged data
+      handleSubmit(() =>
+        onSubmit({ ...allFormData, ...currentData, selectedRoles })
+      )();
     }
   };
 
@@ -273,6 +343,9 @@ const Page: React.FC = () => {
   };
 
   useEffect(() => {
+    clearErrors();
+  }, [currentStep]);
+  useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -322,7 +395,7 @@ const Page: React.FC = () => {
     };
 
     if (currentStep === 1) {
-      clearErrors();
+      // clearErrors();
       fetchData();
     } else if (
       currentStep === 2 &&
@@ -341,6 +414,7 @@ const Page: React.FC = () => {
     }
   }, [currentStep]);
 
+  console.log("8i67u6ytr", errors);
   if (loading) return <Loader />;
 
   return (

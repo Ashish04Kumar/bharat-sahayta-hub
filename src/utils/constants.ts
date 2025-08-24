@@ -176,9 +176,20 @@ export const config = {
     UNAUTHORIZED: 401,
   },
   API_ENDPOINTS: {
-    FETCH_STEP1_TRANSLATION: new URL(`${BASE_API_ENDPOINT}/register-step-1-translation`),
-    FETCH_REGISTER_HELPER_TRANSLATION: new URL(`${BASE_API_ENDPOINT}/register-helper-translation`),
-    FETCH_REGISTER_NGO_TRANSLATION: new URL(`${BASE_API_ENDPOINT}/register-ngo-translation`),
-    FETCH_HELPER_PREFRENCES_TRANSLATION: new URL(`${BASE_API_ENDPOINT}/helper-prefrences-txt`),
+    FETCH_STEP1_TRANSLATION: new URL(
+      `${BASE_API_ENDPOINT}/register-step-1-translation`
+    ),
+    FETCH_REGISTER_HELPER_TRANSLATION: new URL(
+      `${BASE_API_ENDPOINT}/register-helper-translation`
+    ),
+    FETCH_REGISTER_NGO_TRANSLATION: new URL(
+      `${BASE_API_ENDPOINT}/register-ngo-translation`
+    ),
+    FETCH_HELPER_PREFRENCES_TRANSLATION: new URL(
+      `${BASE_API_ENDPOINT}/helper-prefrences-txt`
+    ),
+    FETCH_LOGIN_SCREEN_TRANSLATION: new URL(
+      `${BASE_API_ENDPOINT}/login-translation-txt`
+    ),
   },
 };
