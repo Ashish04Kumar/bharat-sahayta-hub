@@ -5,6 +5,7 @@ import {
   fetchRegisterHelperTranslation,
   fetchRegisterNGOTranslation,
   fetchRegisterStep1Data,
+  postFormData,
 } from "@/services/service-clients";
 import { handleError } from "@/utils/handle-error";
 import { useLanguage } from "@/context/LanguageContext";
@@ -20,13 +21,15 @@ import {
 } from "lucide-react";
 import Loader from "@/components/common/Loader";
 import { RegisterHelperDataType } from "@/types/register-user";
-import RegisterHelperForm from "@/components/registration/RegisterHelperForm";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z, ZodTypeAny } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import RegisterNGOForm from "@/components/registration/RegisterNGOForm";
 import { stepTranslations } from "@/fixtures/registration/registration-translation";
-import RegisterHelperPrefrencesForm from "@/components/registration/RegisterHelperPrefrencesForm";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+import RegisterHelperForm from "@/components/navbar/registration/RegisterHelperForm";
+import RegisterNGOForm from "@/components/navbar/registration/RegisterNGOForm";
+import RegisterHelperPrefrencesForm from "@/components/navbar/registration/RegisterHelperPrefrencesForm";
 
 type Role = {
   title: Record<string, string>;
@@ -150,7 +153,6 @@ const generateHelperPrefrenceSchema = (
 ) => {
   if (!helperPrefrencesFormFields) return z.object({});
 
-  console.log("8i67u6y5t", helperPrefrencesFormFields);
   const shape: Record<string, ZodTypeAny> = {};
 
   Object.entries(helperPrefrencesFormFields).forEach(([, field]: any) => {
@@ -180,13 +182,16 @@ const generateHelperPrefrenceSchema = (
 };
 
 const Page: React.FC = () => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const [step1TranslationData, setStep1TranslationData] =
     useState<Step1TranslationData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const { language } = useLanguage();
   const [selectedRoles, setSelectedRoles] = useState<Role[]>([]);
   const [currentStep, setCurrentStep] = useState<number>(1);
-
+  const [formSubmitLoading, setFormSubmitLoading] = useState<boolean>(false);
   const [registerHelperTranslationData, setRegisterHelperTranslationData] =
     useState<RegisterHelperDataType | null>(null);
   const [registerNGOTranslationData, setRegisterNGOrTranslationData] =
@@ -195,7 +200,7 @@ const Page: React.FC = () => {
     registerHelperPrefrencesTranslationData,
     setRegisterHelperPrefrencesTranslationData,
   ] = useState<any | null>(null);
-  const [allFormData, setAllFormData] = useState<any>({}); // 🔹 for storing all steps data
+  const [allFormData, setAllFormData] = useState<any>({});
 
   const t = stepTranslations[language] || stepTranslations.en;
 
@@ -227,8 +232,30 @@ const Page: React.FC = () => {
     language
   );
 
+  // const activeResolver = useMemo(() => {
+  //   console.log(
+  //     "Resolver changing for step:",
+  //     currentStep,
+  //     "roles:",
+  //     selectedRoles.map((r) => r.title.en)
+  //   );
+
+  //   if (currentStep === 3) {
+  //     return helperPrefrenceSchema;
+  //   } else if (currentStep === 2) {
+  //     return selectedRoles.find((obj) => obj.title.en === "NGO")
+  //       ? registerNGOSchema
+  //       : registerHelperSchema;
+  //   }
+
+  //   // Default fallback
+  //   return z.object({});
+  // }, [currentStep]);
+
   let activeResolver: any;
-  if (currentStep === 3) {
+  if (currentStep === 1) {
+    activeResolver = z.object({});
+  } else if (currentStep === 3) {
     activeResolver = helperPrefrenceSchema;
   } else {
     activeResolver = selectedRoles.find((obj) => obj.title.en === "NGO")
@@ -237,10 +264,10 @@ const Page: React.FC = () => {
   }
 
   type FormData = z.infer<typeof activeResolver>;
+
   const {
     register,
     handleSubmit,
-    clearErrors,
     formState: { errors },
     trigger,
     getValues,
@@ -254,8 +281,77 @@ const Page: React.FC = () => {
     reValidateMode: "onChange",
   });
 
-  const onSubmit: SubmitHandler<FormData> = (data) => {
-    console.log("Form submitted from parent:", data);
+  const onSubmit: SubmitHandler<FormData> = async (data) => {
+    delete data.selectedRoles;
+    const formData = new FormData();
+
+    Object.keys(data).forEach((key) => {
+      const value = data[key];
+
+      if (value !== undefined && value !== null) {
+        if (value instanceof FileList) {
+          if (value.length > 0) {
+            formData.append(key, value[0]);
+          }
+        } else if (Array.isArray(value)) {
+          value.forEach((v) => formData.append(`${key}[]`, v));
+        } else {
+          formData.append(key, value as string);
+        }
+      }
+    });
+
+    if (
+      (currentStep === 2 &&
+        selectedRoles.length === 1 &&
+        selectedRoles[0]?.title.en === "Seeker") ||
+      currentStep === 3
+    ) {
+      formData.append("isFinalStep", "true");
+    } else {
+      formData.append("isFinalStep", "false");
+    }
+
+    setFormSubmitLoading(true);
+    try {
+      const resp = await postFormData(
+        formData,
+        currentStep,
+        selectedRoles.map((r) => r.title.en).join("+")
+      );
+      const respData = await resp.json();
+      console.log("respData", respData);
+      if (resp.status === 400) {
+        handleError(respData.message[language]);
+        setTimeout(() => {
+          window.location.href = "/register-user";
+        }, 1000);
+      } else if (resp.status === 200 || resp.status === 201) {
+        if (
+          currentStep === 3 ||
+          (currentStep === 2 &&
+            selectedRoles.length === 1 &&
+            selectedRoles[0]?.title.en === "Seeker")
+        ) {
+          toast.success(respData.message[language]);
+          setTimeout(() => {
+            setFormSubmitLoading(true);
+            router.push("/login");
+          }, 2000);
+        }
+      } else if (resp.status === 500) {
+        toast.error("Email Already Exists");
+        setTimeout(() => {
+          window.location.href = "/register-user";
+        }, 1000);
+      }
+      setFormSubmitLoading(false);
+
+      // reset({});
+    } catch (err) {
+      console.error("Error:", err);
+      setFormSubmitLoading(false);
+    }
   };
 
   const handleNext = async () => {
@@ -263,6 +359,7 @@ const Page: React.FC = () => {
     if (!isStepValid) return;
 
     const currentData = getValues();
+    console.log("&ury6tre", currentData);
     setAllFormData((prev: any) => ({ ...prev, ...currentData }));
 
     if (currentStep === 1) {
@@ -274,15 +371,16 @@ const Page: React.FC = () => {
         selectedRoles.length === 1 &&
         selectedRoles[0]?.title.en === "Seeker"
       ) {
-        // 🔹 Final submit here (Step2 is last for Seeker)
         handleSubmit(() =>
           onSubmit({ ...allFormData, ...currentData, selectedRoles })
         )();
       } else {
+        handleSubmit(() =>
+          onSubmit({ ...allFormData, ...currentData, selectedRoles })
+        )();
         setCurrentStep(3);
       }
     } else if (currentStep === 3) {
-      // 🔹 Final submit with merged data
       handleSubmit(() =>
         onSubmit({ ...allFormData, ...currentData, selectedRoles })
       )();
@@ -342,9 +440,50 @@ const Page: React.FC = () => {
     return 3;
   };
 
+  // useEffect(() => {
+  //   // Clear errors when step changes
+  //   clearErrors();
+
+  //   // Reset form based on current step
+  //   if (currentStep === 1) {
+  //     reset({});
+  //   } else if (currentStep === 2) {
+  //     reset({});
+  //   } else if (currentStep === 3) {
+  //     reset({
+  //       helpCategories: [],
+  //       typeOfHelp: [],
+  //     });
+  //   }
+  // }, [currentStep, reset, clearErrors]);
+  const handlePrev = () => {
+    // clearErrors ();
+    // reset();
+    setCurrentStep((prev) => prev - 1);
+  };
+
   useEffect(() => {
-    clearErrors();
+    if (currentStep === 1) {
+      setAllFormData({});
+    }
   }, [currentStep]);
+
+  const updateQueryParams = (step: number, roles: Role[]) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("current-step", step.toString());
+    if (roles.length > 0) {
+      const roleString = roles.map((r) => r.title.en).join("+");
+      params.set("role", roleString);
+    } else {
+      params.delete("role");
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  useEffect(() => {
+    updateQueryParams(currentStep, selectedRoles);
+  }, [currentStep, selectedRoles]);
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -414,8 +553,7 @@ const Page: React.FC = () => {
     }
   }, [currentStep]);
 
-  console.log("8i67u6ytr", errors);
-  if (loading) return <Loader />;
+  if (loading || formSubmitLoading) return <Loader />;
 
   return (
     <section className="registration-steps-wrapper mt-[60px] flex-1">
@@ -600,7 +738,7 @@ const Page: React.FC = () => {
               {currentStep > 1 ? (
                 <>
                   <button
-                    onClick={() => setCurrentStep((prev) => prev - 1)}
+                    onClick={handlePrev}
                     className="justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2 flex items-center gap-2"
                   >
                     <ArrowLeft size={16} />

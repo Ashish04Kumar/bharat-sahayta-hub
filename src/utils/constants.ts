@@ -185,11 +185,22 @@ export const config = {
     FETCH_REGISTER_NGO_TRANSLATION: new URL(
       `${BASE_API_ENDPOINT}/register-ngo-translation`
     ),
+    FETCH_DASHBOARD_TRANSLATION: new URL(
+      `${BASE_API_ENDPOINT}/dashboard-translation`
+    ),
     FETCH_HELPER_PREFRENCES_TRANSLATION: new URL(
       `${BASE_API_ENDPOINT}/helper-prefrences-txt`
     ),
     FETCH_LOGIN_SCREEN_TRANSLATION: new URL(
       `${BASE_API_ENDPOINT}/login-translation-txt`
     ),
+    POST_FORM_DATA: (currentStep: number, role: string) => {
+      const url = new URL(`${BASE_API_ENDPOINT}/register-user`);
+      if (role) url.searchParams.append("role", role);
+      if (currentStep)
+        url.searchParams.append("currentstep", currentStep.toString());
+      return url;
+    },
+    LOGIN_USER: new URL(`${BASE_API_ENDPOINT}/login-user`),
   },
 };
