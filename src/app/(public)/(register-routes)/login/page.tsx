@@ -8,12 +8,16 @@ import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import { useLanguage } from "@/context/LanguageContext";
-import { fetchLoginScreenTranslation } from "@/services/service-clients";
+import {
+  fetchLoginScreenTranslation,
+  loginUser,
+} from "@/services/service-clients";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { AlertCircle, Lock, Mail } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { handleError } from "@/utils/handle-error";
 
 // ✅ Validation schema with Zod
 const schema = z.object({
@@ -52,7 +56,6 @@ const Page = () => {
     fetchData();
   }, []);
 
-  console.log("8i67uy6t", loginScreenTranslationData);
   const {
     register,
     handleSubmit,
@@ -61,8 +64,18 @@ const Page = () => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = (data: FormData) => {
+  const onSubmit = async (data: FormData) => {
     console.log("Form submitted:", data);
+    const resp = await loginUser({
+      email: data.email,
+      password: data.password,
+    });
+    const respData = await resp.json();
+    if (resp.status === 400) {
+      handleError(respData.message[language]);
+    } else {
+      router.push("/dashboard");
+    }
   };
 
   return (

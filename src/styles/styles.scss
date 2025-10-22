@@ -630,3 +630,20 @@ textarea {
     font-size: 15px;
   }
 }
+
+
+.authenticated-nav-active-items {
+  color: white !important;
+  background: linear-gradient(135deg,
+      hsl(20, 95%, 58%),
+      hsl(25, 100%, 65%));
+
+  &:hover {
+    color: white !important;
+  }
+}
+
+
+.dashboard-wrapper{
+  
+}

@@ -1,21 +1,18 @@
-
-import { LanguageProvider } from "@/context/LanguageContext";
-// import 'bootstrap/dist/css/bootstrap.min.css';
-import "./globals.css";
-import "./styles.scss";
-
-import CommonNavbar from "@/components/navbar/CommonNavbar";
 import CommonFooter from "@/components/footer/CommonFooter";
+import { LanguageProvider } from "@/context/LanguageContext";
+import { Toaster } from "react-hot-toast";
+import "./globals.css";
+import "../styles/styles.scss";
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
       <body>
         <LanguageProvider>
-          <CommonNavbar />
+          <Toaster position="top-right" reverseOrder={false} />
           {children}
           <CommonFooter />
         </LanguageProvider>

@@ -6,7 +6,7 @@ import { useLanguage } from "../../context/LanguageContext";
 import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 
-const CommonNavbar = () => {
+const PublicNavbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { language, changeLanguage } = useLanguage();
   const pathname = usePathname();
@@ -172,4 +172,4 @@ const CommonNavbar = () => {
   );
 };
 
-export default CommonNavbar;
+export default PublicNavbar;

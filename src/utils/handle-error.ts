@@ -28,33 +28,8 @@ export function iterateObject(obj: Record<string, any>): string {
   return errorMessage;
 }
 
-export const handleError = (error: unknown) => {
-  // console.log("handleError",error)
-  // toast.dismiss()
-  if (typeof error === "string") {
-    toast(error, config.TOASTER_OPTIONS.ERROR);
-  } else if (
-    typeof error === "object" &&
-    (error as { message: string }).message
-  ) {
-    toast(
-      (error as { message: string })?.message,
-      config.TOASTER_OPTIONS.ERROR
-    );
-  } else {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const _error = error as Record<string, any>;
-    const message = iterateObject(_error);
-    if (message) {
-      toast(message, config.TOASTER_OPTIONS.ERROR);
-      console.error(message);
-    } else {
-      const appLang = localStorage.getItem("appLang");
-      toast(
-        config.MESSAGES.GENERIC_ERROR[appLang],
-        config.TOASTER_OPTIONS.ERROR
-      );
-      console.error("Something went wrong");
-    }
-  }
+export const handleError = (error: string) => {
+  // console.log("978i6u54", error);
+  // const lang = localStorage.getItem("appLang") || "en";
+  toast.error(error);
 };
