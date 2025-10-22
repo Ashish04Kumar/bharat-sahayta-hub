@@ -3,7 +3,6 @@ import { LanguageProvider } from "@/context/LanguageContext";
 import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import "../styles/styles.scss";
-
 export default function RootLayout({
   children,
 }: {

@@ -202,5 +202,6 @@ export const config = {
       return url;
     },
     LOGIN_USER: new URL(`${BASE_API_ENDPOINT}/login-user`),
+    LOGOUT_USER: new URL(`${BASE_API_ENDPOINT}/logout-user`),
   },
 };

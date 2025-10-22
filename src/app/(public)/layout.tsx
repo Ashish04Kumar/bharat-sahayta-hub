@@ -1,5 +1,5 @@
+import PublicNavbar from "@/components/navbar/PublicNavbar";
 
-import PublicNavbar from "@/components/navbar/AuthenticatedNavbar";
 export default function PublicLayout({
   children,
 }: Readonly<{

@@ -3,8 +3,10 @@ import React, { useState, useEffect } from "react";
 import { useLanguage } from "../../context/LanguageContext";
 import bannerSectionTranslation from "../../fixtures/landing-page/banner.json";
 import { Heart, ShieldAlert } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const BannerSection = () => {
+  const router = useRouter();
   const translations = [
     { text: "सहायता" }, // Hindi
     { text: "உதவி" }, // Tamil
@@ -48,7 +50,10 @@ const BannerSection = () => {
         </p>
         <div className="mb-2 lg:mb-4 xl:mb-5">Your content</div>
         <div className="mt-[50px] flex justify-center gap-3 md:gap-4 lg:gap-5 text-center flex-wrap">
-          <button className="cursor-pointer flex items-center gap-2 !px-3 lg:!px-5 !py-3 lg:!py-4  rounded-md bg-gradient-to-r from-orange-400 to-orange-600 text-white font-medium hover:brightness-110 transition">
+          <button
+            onClick={() => router.push("/register-user")}
+            className="cursor-pointer flex items-center gap-2 !px-3 lg:!px-5 !py-3 lg:!py-4  rounded-md bg-gradient-to-r from-orange-400 to-orange-600 text-white font-medium hover:brightness-110 transition"
+          >
             <Heart /> {t.startButton}
           </button>
           <button className="cursor-pointer !px-3 lg:!px-5 !py-3  lg:py-4 rounded-md bg-red-500 text-white font-medium hover:bg-red-600 transition flex items-center gap-2 heartbeat-shadow">

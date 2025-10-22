@@ -250,6 +250,36 @@ export const loginUser = async (loginData: Record<string, string>) => {
     throw error; // Re-throw so React component can catch it
   }
 };
+export const logoutUser = async () => {
+  try {
+    const url = new URL(config.API_ENDPOINTS.LOGOUT_USER).href;
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: getHeaders(),
+      credentials: "include", 
+    });
+
+    if (response.status === config.STATUS.UNAUTHORIZED) {
+      localStorage.clear();
+      sessionStorage.clear();
+
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 3000);
+
+      throw {
+        status: config.STATUS.UNAUTHORIZED,
+        message: config.MESSAGES.ACCESS_TOKEN_EXPIRED,
+      };
+    }
+
+    return response;
+  } catch (error) {
+    handleError(error);
+    throw error; // Re-throw so React component can catch it
+  }
+};
 
 export const fetchDashboardTranslation = async () => {
   try {

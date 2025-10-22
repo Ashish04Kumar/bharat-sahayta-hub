@@ -8,16 +8,19 @@ import {
   Bell,
   FilePlus2,
   Map,
-} from "lucide-react"; // import icons
+  LogOut,
+} from "lucide-react";
 import { JSX, useEffect, useState } from "react";
 import { useLanguage } from "../../context/LanguageContext";
-import { useRouter } from "next/navigation";
-import { fetchDashboardTranslation } from "@/services/service-clients";
-import { usePathname } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
+import {
+  fetchDashboardTranslation,
+  logoutUser,
+} from "@/services/service-clients";
+import { handleError } from "@/utils/handle-error";
 
 const AuthenticatedNavbar = () => {
   const pathname = usePathname();
-  console.log("645yt4rew", pathname);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { language, changeLanguage } = useLanguage();
   const [navbarTranslationData, setNavbarTranslationData] = useState<{
@@ -62,16 +65,33 @@ const AuthenticatedNavbar = () => {
     { code: "bn", name: "Bengali" },
   ];
 
+  const logoutTexts: Record<string, string> = {
+    en: "Logout",
+    hi: "लॉगआउट",
+    ta: "வெளியேறு",
+    pa: "ਲੌਗਆਉਟ",
+    bn: "লগআউট",
+  };
+
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     changeLanguage(e.target.value as typeof language);
+  };
+
+  const handleLogout = async () => {
+    try {
+      router.push("/login");
+      const res = await logoutUser();
+    } catch (err) {
+      handleError(err);
+    }
   };
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-lg border-b border-border/50 common-nav-wrapper">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between  gap-40 h-16">
-          <div className="flex items-center gap-32 h-16">
-            {/* Logo */}
+        <div className="flex items-center justify-between gap-8 h-16">
+          {/* Logo + Nav */}
+          <div className="flex items-center gap-16 h-16">
             <div
               className="flex items-center gap-2 cursor-pointer"
               onClick={() => router.push("/")}
@@ -90,31 +110,28 @@ const AuthenticatedNavbar = () => {
             </div>
 
             <nav className="hidden md:flex items-center gap-6">
-              {navbarTranslationData &&
-                navbarTranslationData.navbarItems.map((item, index) => {
-                  const isActive = pathname === `/${item.href}`;
-                  return (
-                    <button
-                      key={index}
-                      onClick={() => router.push(`/${item.href}`)}
-                      className={`flex p-2 rounded-md items-center gap-2 text-foreground hover:text-primary transition-colors ${
-                        isActive ? "authenticated-nav-active-items" : ""
-                      }`}
-                    >
-                      {iconMap[item.en] || (
-                        <LayoutDashboard className="w-5 h-5" />
-                      )}
-                      <span className="font-semibold text-md">
-                        {item[language] || item.en}
-                      </span>
-                    </button>
-                  );
-                })}
-
-              {/* Language Selector */}
+              {navbarTranslationData.navbarItems.map((item, index) => {
+                const isActive = pathname === `/${item.href}`;
+                return (
+                  <button
+                    key={index}
+                    onClick={() => router.push(`/${item.href}`)}
+                    className={`flex p-2 rounded-md items-center gap-2 text-foreground hover:text-primary transition-colors ${
+                      isActive ? "authenticated-nav-active-items" : ""
+                    }`}
+                  >
+                    {iconMap[item.en] || (
+                      <LayoutDashboard className="w-5 h-5" />
+                    )}
+                    <span className="font-semibold text-md">
+                      {item[language] || item.en}
+                    </span>
+                  </button>
+                );
+              })}
             </nav>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile menu button */}
             <button
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="md:hidden p-2 text-muted-foreground hover:text-primary"
@@ -126,20 +143,32 @@ const AuthenticatedNavbar = () => {
               )}
             </button>
           </div>
-          <select
-            value={language}
-            onChange={handleLanguageChange}
-            className="border border-gray-300 rounded-md px-2 py-1 text-sm bg-white text-foreground text-dark"
-          >
-            {languages.map((lang) => (
-              <option key={lang.code} value={lang.code}>
-                {lang.name}
-              </option>
-            ))}
-          </select>
+
+          {/* 🟢 Language & Logout */}
+          <div className="flex items-center gap-4">
+            <select
+              value={language}
+              onChange={handleLanguageChange}
+              className="border border-gray-300 rounded-md px-2 py-1 text-sm bg-white text-foreground text-dark"
+            >
+              {languages.map((lang) => (
+                <option key={lang.code} value={lang.code}>
+                  {lang.name}
+                </option>
+              ))}
+            </select>
+
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+              {logoutTexts[language] || "Logout"}
+            </button>
+          </div>
         </div>
 
-        {/* Mobile Dropdown */}
+        {/* Mobile dropdown */}
         {isMobileMenuOpen && (
           <div className="md:hidden border-t border-border/50 py-4">
             <nav className="flex flex-col space-y-4">
@@ -148,7 +177,7 @@ const AuthenticatedNavbar = () => {
                   key={index}
                   onClick={() => {
                     setIsMobileMenuOpen(false);
-                    router.push(item.href);
+                    router.push(`/${item.href}`);
                   }}
                   className="flex items-center gap-2 text-foreground hover:text-primary transition-colors"
                 >
@@ -157,6 +186,7 @@ const AuthenticatedNavbar = () => {
                 </button>
               ))}
 
+              {/* Language Selector */}
               <select
                 value={language}
                 onChange={handleLanguageChange}
@@ -168,6 +198,18 @@ const AuthenticatedNavbar = () => {
                   </option>
                 ))}
               </select>
+
+              {/* 🟢 Logout in mobile */}
+              <button
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  handleLogout();
+                }}
+                className="flex items-center gap-2 px-3 py-2 rounded-md bg-red-500 text-white text-sm font-medium hover:bg-red-600 transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+                {logoutTexts[language] || "Logout"}
+              </button>
             </nav>
           </div>
         )}
